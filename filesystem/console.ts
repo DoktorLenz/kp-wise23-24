@@ -1,3 +1,6 @@
 export interface Console {
-    println(line: string): void;
+    println(message: string): void;
+
+    read(message: string): string | null
 }
+

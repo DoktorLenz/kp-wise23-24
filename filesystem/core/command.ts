@@ -1,11 +1,11 @@
-import { Directory } from "./directory.ts";
+import { Environment } from "./environment.ts";
 
 export abstract class Command {
-    constructor(public readonly accessor: string, protected readonly cwd: Directory) {}
-    public abstract execute(...args: any): string | void;
+    constructor(public readonly accessor: string, protected readonly env: Environment) {}
+    public abstract execute(input: string): string | void;
 }
 
-export type CommandGenerator = (cwd: Directory) => void;
+export type CommandGenerator = (environment: Environment) => Command;
 
 export function getGeneratorFunctions(obj: Record<string, unknown>): CommandGenerator[] {
     const generatorFunctions: CommandGenerator[] = [];
