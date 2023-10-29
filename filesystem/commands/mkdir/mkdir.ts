@@ -3,7 +3,7 @@ import { Directory } from "../../core/directory.ts";
 import { Environment } from "../../core/environment.ts";
 
 class mkdir extends Command {
-  public execute(input: string): string|void {
+  public execute(input: string): void {
     this.env.cwd.addFsObject(new Directory(input, this.env.cwd));
   }
   

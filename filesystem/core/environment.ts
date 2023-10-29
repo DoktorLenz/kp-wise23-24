@@ -15,6 +15,7 @@ export class Environment {
     }
 
     async loadTsCommands(): Promise<void> {
+        this.commands = {};
         for await (const entry of walk("./commands")) {
             if (entry.isFile && entry.name.endsWith(".ts")) {
                 const module = await import(`../${entry.path}`)
@@ -37,9 +38,9 @@ export class Environment {
                 const command: string = input.split(/\s/)[0];
                 if (this.commands[command]) {
                     this.commands[command].execute(input.substring(command.length + 1, input.length));
+                } else {
+                    this.console.println(`Command '${input}' not found`);
                 }
-            } else {
-                this.console.println(`Command '${input}' not found`);
             }
         }
     }

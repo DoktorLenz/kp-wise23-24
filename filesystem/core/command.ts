@@ -2,7 +2,7 @@ import { Environment } from "./environment.ts";
 
 export abstract class Command {
     constructor(public readonly accessor: string, protected readonly env: Environment) {}
-    public abstract execute(input: string): string | void;
+    public abstract execute(input: string): Promise<string | void> | string | void;
 }
 
 export type CommandGenerator = (environment: Environment) => Command;

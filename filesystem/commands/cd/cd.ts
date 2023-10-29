@@ -3,7 +3,7 @@ import { Environment } from "../../core/environment.ts";
 
 
 class cd extends Command {
-    public execute(input: string): string | void {
+    public execute(input: string): void {
         const paths = input.split("/");
         const startDirectory = this.env.cwd;
         for (const path of paths) {
