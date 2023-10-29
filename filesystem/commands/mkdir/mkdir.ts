@@ -1,6 +1,6 @@
 import { Command, CommandGenerator } from "../../core/command.ts";
 import { Directory } from "../../core/directory.ts";
-import { Environment } from "../../core/environment.ts";
+import { Environment } from "../../environment.ts";
 
 class mkdir extends Command {
   public execute(input: string): void {

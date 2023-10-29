@@ -1,6 +1,7 @@
 
-import { Cli } from "./Cli.ts";
-import { Environment } from "./core/environment.ts";
+
+import { Cli } from "./cli.ts";
+import { Environment } from "./environment.ts";
 
 const environment = new Environment(new Cli());
 

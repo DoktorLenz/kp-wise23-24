@@ -1,5 +1,5 @@
 import { Command,CommandGenerator } from "../../core/command.ts";
-import { Environment } from "../../core/environment.ts";
+import { Environment } from "../../environment.ts";
 
 
 class cd extends Command {

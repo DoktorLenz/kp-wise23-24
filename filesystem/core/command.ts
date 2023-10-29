@@ -1,4 +1,4 @@
-import { Environment } from "./environment.ts";
+import { Environment } from "../environment.ts";
 
 export abstract class Command {
     constructor(public readonly accessor: string, protected readonly env: Environment) {}

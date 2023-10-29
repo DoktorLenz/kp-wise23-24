@@ -1,7 +1,7 @@
 import { walk } from "https://deno.land/std@0.170.0/fs/walk.ts";
-import { Command,getGeneratorFunctions } from "./command.ts";
-import { Directory } from "./directory.ts";
-import { Console } from "../console.ts";
+import { Command,getGeneratorFunctions } from "./core/command.ts";
+import { Directory } from "./core/directory.ts";
+import { Console } from "./console.ts";
 
 export class Environment {
     private rootDirectory;
@@ -16,9 +16,9 @@ export class Environment {
 
     async loadTsCommands(): Promise<void> {
         this.commands = {};
-        for await (const entry of walk("./commands")) {
+        for await (const entry of walk(Deno.cwd() + "/commands")) {
             if (entry.isFile && entry.name.endsWith(".ts")) {
-                const module = await import(`../${entry.path}`)
+                const module = await import(`file:///${entry.path}`)
                 // Assumes every function in the module is a command generator
                 getGeneratorFunctions(module).forEach(generator => {
                     const command: Command = generator(this);
