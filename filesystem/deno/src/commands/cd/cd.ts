@@ -21,9 +21,10 @@ class cd extends Command {
 				this.env.cwd = this.env.cwd.parent ??
 					this.env.cwd;
 			} else if (path !== '.') {
-				const directory = this.env.cwd.getDirectory(
-					path,
-				);
+				const directory = this.env.cwd
+					.getChildDirectory(
+						path,
+					);
 				if (directory) {
 					this.env.cwd = directory;
 				} else {

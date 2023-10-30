@@ -6,7 +6,7 @@ class mkdir extends Command {
 	public execute(input: string): Promise<void> {
 		return new Promise((resolve, reject) => {
 			try {
-				this.env.cwd.addFsObject(
+				this.env.cwd.appendChild(
 					new Directory(input, this.env.cwd),
 				);
 				resolve();

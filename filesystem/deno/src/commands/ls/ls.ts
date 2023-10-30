@@ -4,7 +4,7 @@ import { Environment } from '../../environment.ts';
 class ls extends Command {
 	public execute(): Promise<void> {
 		return new Promise((resolve) => {
-			this.env.cwd.getFsObjects().forEach((obj) =>
+			this.env.cwd.getChildren().forEach((obj) =>
 				this.env.console.println(obj.name)
 			);
 			resolve();

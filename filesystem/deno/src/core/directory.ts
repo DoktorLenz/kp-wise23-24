@@ -2,7 +2,7 @@ import { FsObjectType } from './fs-object-type.enum.ts';
 import { FsObject } from './fs-object.ts';
 
 export class Directory extends FsObject {
-	private readonly fsObjects: FsObject[] = [];
+	private readonly children: FsObject[] = [];
 
 	constructor(
 		public readonly name: string,
@@ -11,16 +11,16 @@ export class Directory extends FsObject {
 		super(name, parent, FsObjectType.DIRECTORY);
 	}
 
-	public addFsObject(fsObject: FsObject): void {
-		this.fsObjects.push(fsObject);
+	public appendChild(child: FsObject): void {
+		this.children.push(child);
 	}
 
-	public getFsObjects(): FsObject[] {
-		return this.fsObjects;
+	public getChildren(): FsObject[] {
+		return this.children;
 	}
 
-	public getDirectory(name: string): Directory | null {
-		return this.fsObjects
+	public getChildDirectory(name: string): Directory | null {
+		return this.children
 			.find((obj) =>
 				obj.fsObjectType === FsObjectType.DIRECTORY &&
 				obj.name === name
