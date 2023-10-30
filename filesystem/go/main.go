@@ -1,7 +1,23 @@
 package main
 
-import "fmt"
+import (
+	"log"
+	"os"
+)
 
 func main() {
-	fmt.Println("Hello, World!");
+	// Setup logger
+	log.SetOutput(os.Stdout)
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
+	// create new CLI and Environment
+	cli := CLI{}
+	env := Environment{console: cli}
+
+	err := env.LoadGoCommands()
+	if err != nil {
+		log.Fatalf("Failed to load go commands: %v", err)
+	}
+
+	env.Run()
 }
