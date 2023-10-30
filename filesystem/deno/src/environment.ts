@@ -21,24 +21,27 @@ export class Environment {
 	async loadTsCommands(): Promise<void> {
 		this.logger.debug('Loading TS Commands ...');
 		this.commands = {};
+		const id = self.crypto.randomUUID();
 		for await (const entry of walk(Deno.cwd() + '/src/commands')) {
 			if (entry.isFile && entry.name.endsWith('.ts')) {
 				const module = await import(
-					`file:///${entry.path}`
+					`file:///${entry.path}#${id}`
 				);
+				this.logger.debug(module);
 				// Assumes every function in the module is a command generator
-				getGeneratorFunctions(module).forEach(
-					(generator) => {
-						const command: Command =
-							generator(this);
-						this.commands[
-							command.accessor
-						] = command;
-						this.logger.debug(
-							`Loaded command '${command.accessor}'`,
-						);
-					},
-				);
+				getGeneratorFunctions(module)
+					.forEach(
+						(generator) => {
+							const command: Command =
+								generator(this);
+							this.commands[
+								command.accessor
+							] = command;
+							this.logger.debug(
+								`Loaded command '${command.accessor}'`,
+							);
+						},
+					);
 			}
 		}
 		this.logger.debug('TS Commands loaded!');
