@@ -1,4 +1,4 @@
 export enum FsObjectType {
-    FILE,
-    DIRECTORY
+	FILE,
+	DIRECTORY,
 }

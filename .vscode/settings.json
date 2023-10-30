@@ -1,5 +1,10 @@
 {
     "deno.enable": true,
     "deno.lint": true,
-    "deno.unstable": true
+    "deno.unstable": true,
+    "eslint.enable": false,
+    "deno.enablePaths": [
+        "./filesystem/deno"
+    ],
+    "deno.config": "./filesystem/deno/deno.json"
 }
