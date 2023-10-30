@@ -2,12 +2,16 @@ import { walk } from "https://deno.land/std@0.170.0/fs/walk.ts";
 import { Command,getGeneratorFunctions } from "./core/command.ts";
 import { Directory } from "./core/directory.ts";
 import { Console } from "./console.ts";
+import { Logger, getLogger } from "https://deno.land/std@0.204.0/log/mod.ts";
 
 export class Environment {
     private rootDirectory;
     private currentWorkingDirectory;
     private commands: {[commandName: string]: Command} = {}
 
+    private get logger(): Logger {
+        return getLogger("std");
+    }
 
     constructor(public readonly console: Console) {
         this.rootDirectory = new Directory("", null);
@@ -15,6 +19,7 @@ export class Environment {
     }
 
     async loadTsCommands(): Promise<void> {
+        this.logger.debug("Loading TS Commands ...");
         this.commands = {};
         for await (const entry of walk(Deno.cwd() + "/commands")) {
             if (entry.isFile && entry.name.endsWith(".ts")) {
@@ -23,9 +28,11 @@ export class Environment {
                 getGeneratorFunctions(module).forEach(generator => {
                     const command: Command = generator(this);
                     this.commands[command.accessor] = command;
+                    this.logger.debug(`Loaded command '${command.accessor}'`);
                 });
             }
         }
+        this.logger.debug("TS Commands loaded!");
     }
 
     run(): void {
