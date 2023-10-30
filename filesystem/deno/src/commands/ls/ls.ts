@@ -2,10 +2,13 @@ import { Command, CommandGenerator } from '../../core/command.ts';
 import { Environment } from '../../environment.ts';
 
 class ls extends Command {
-	public execute(): void {
-		this.env.cwd.getFsObjects().forEach((obj) =>
-			this.env.console.println(obj.name)
-		);
+	public execute(): Promise<void> {
+		return new Promise((resolve) => {
+			this.env.cwd.getFsObjects().forEach((obj) =>
+				this.env.console.println(obj.name)
+			);
+			resolve();
+		});
 	}
 }
 
