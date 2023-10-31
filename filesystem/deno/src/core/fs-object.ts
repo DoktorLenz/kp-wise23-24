@@ -1,4 +1,3 @@
-import { Directory } from './directory.ts';
 import { FsObjectType } from './fs-object-type.enum.ts';
 
 export abstract class FsObject {
