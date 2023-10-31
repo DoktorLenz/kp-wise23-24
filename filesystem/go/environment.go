@@ -1,32 +1,45 @@
 package main
 
 import (
+	"log"
+
 	"github.com/doktorlenz/filesystem/core"
 )
 
 type Environment struct {
-	console Console
+	console                 Console
+	rootDirectory           *core.Directory
+	currentWorkingDirectory *core.Directory
+}
+
+func NewEnvironment(console Console) *Environment {
+	root := core.NewDirectory("/", nil)
+	return &Environment{console: console, rootDirectory: root, currentWorkingDirectory: root}
 }
 
 func (env *Environment) Run() {
-	a := core.NewDirectory("a", nil)
-	b := core.NewDirectory("b", a)
-	a.AddChild(b.GetAbstractFsObject())
-	// env.console.Println(a.GetChildDirectory("b").GetName())
-	// env.console.Println(a.GetName())
-
-	if parent, err := a.GetChildDirectory("b").GetParent(); err == nil {
-		env.console.Println(parent.GetName())
-		if grandparent, err := parent.GetParent(); err == nil {
-			env.console.Println(grandparent.GetName())
+	var input string
+	for input != "exit" {
+		if input, err := env.console.Read("fs> "); err == nil {
+			if input == "exit" {
+				break
+			}
 		} else {
-			env.console.Println(err.Error())
+			log.Fatalf("Failed to read input: %v", err)
+			break
 		}
-	} else {
-		env.console.Println(err.Error())
+
 	}
 }
 
 func (env *Environment) LoadGoCommands() error {
 	return nil
+}
+
+func (env *Environment) GetCwd() *core.Directory {
+	return env.currentWorkingDirectory
+}
+
+func (env *Environment) SetCwd(dir *core.Directory) {
+	env.currentWorkingDirectory = dir
 }

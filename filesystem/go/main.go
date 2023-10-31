@@ -12,7 +12,7 @@ func main() {
 
 	// create new CLI and Environment
 	cli := CLI{}
-	env := Environment{console: cli}
+	env := NewEnvironment(cli)
 
 	err := env.LoadGoCommands()
 	if err != nil {
