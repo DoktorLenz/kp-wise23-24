@@ -1,8 +1,9 @@
 package env
 
 import (
-	"filesystem/core"
 	"log"
+
+	"github.com/DoktorLenz/kp-wise23-24/filesystem/go/core"
 )
 
 type Environment struct {

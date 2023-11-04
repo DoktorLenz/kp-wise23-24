@@ -1,9 +1,10 @@
 package main
 
 import (
-	"filesystem/env"
 	"log"
 	"os"
+
+	"github.com/DoktorLenz/kp-wise23-24/filesystem/go/env"
 )
 
 func main() {
