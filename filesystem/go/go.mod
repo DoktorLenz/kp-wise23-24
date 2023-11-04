@@ -1,3 +1,3 @@
-module github.com/doktorlenz/filesystem
+module filesystem
 
 go 1.21.3

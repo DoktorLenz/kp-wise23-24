@@ -1,6 +1,7 @@
 package main
 
 import (
+	"filesystem/env"
 	"log"
 	"os"
 )
@@ -11,8 +12,8 @@ func main() {
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
 
 	// create new CLI and Environment
-	cli := CLI{}
-	env := NewEnvironment(cli)
+	cli := env.CLI{}
+	env := env.NewEnvironment(cli)
 
 	err := env.LoadGoCommands()
 	if err != nil {

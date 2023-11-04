@@ -1,18 +1,17 @@
-package main
+package env
 
 import (
+	"filesystem/core"
 	"log"
-
-	"github.com/doktorlenz/filesystem/core"
 )
 
 type Environment struct {
-	console                 Console
+	console                 core.Console
 	rootDirectory           *core.Directory
 	currentWorkingDirectory *core.Directory
 }
 
-func NewEnvironment(console Console) *Environment {
+func NewEnvironment(console core.Console) *Environment {
 	root := core.NewDirectory("/", nil)
 	return &Environment{console: console, rootDirectory: root, currentWorkingDirectory: root}
 }

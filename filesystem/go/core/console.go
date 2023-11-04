@@ -1,4 +1,4 @@
-package main
+package core
 
 type Console interface {
 	Read(message string) (string, error)
