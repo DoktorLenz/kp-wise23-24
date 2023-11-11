@@ -34,12 +34,6 @@ func (env *Environment) Run() {
 }
 
 func (env *Environment) LoadGoCommands() error {
-	env.commands = make(map[string]*AbstractCommand)
-	env.commands[mkdir.Accessor] = &AbstractCommand{
-		Accessor:    mkdir.Accessor,
-		Environment: env,
-		Execute:     mkdir.Generator(env),
-	}
 	return nil
 }
 
