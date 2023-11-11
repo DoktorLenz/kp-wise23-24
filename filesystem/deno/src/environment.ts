@@ -22,7 +22,7 @@ export class Environment {
 		this.logger.debug('Loading TS Commands ...');
 		this.commands = {};
 		const id = self.crypto.randomUUID();
-		for await (const entry of walk(Deno.cwd() + '/src/commands')) {
+		for await (const entry of walk(Deno.cwd() + '/commands')) {
 			if (entry.isFile && entry.name.endsWith('.ts')) {
 				const module = await import(
 					`file:///${entry.path}#${id}`
