@@ -4,7 +4,10 @@
     "deno.unstable": true,
     "eslint.enable": false,
     "deno.enablePaths": [
-        "./filesystem/deno"
+        "./quiz/deno"
     ],
-    "deno.config": "./filesystem/deno/deno.json",
+    "deno.config": "./quiz/deno/deno.json",
+    "deno.suggest.imports.hosts": {
+        "https://deno.land": true
+    }
 }
