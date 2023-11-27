@@ -2,7 +2,7 @@ import {
   Input,
   Secret,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
-import { getUsers, User } from "../../user.ts";
+import { User } from "../../user.ts";
 import { IState } from "./state.ts";
 import { InitState } from "./init-state.ts";
 import { LoggedInState } from "./logged-in/logged-in-state.ts";
