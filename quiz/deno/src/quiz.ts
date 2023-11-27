@@ -24,8 +24,16 @@ export class Quiz {
     this.name = name;
   }
 
-  static async isAnyQuizRegistered() {
-    return false;
+  public async delete(): Promise<void> {
+    const quizzes = await Quiz.getAllQuizzes();
+    const index = quizzes.findIndex((quiz) => quiz.id === this.id);
+
+    quizzes.splice(index, 1);
+    Quiz.saveAllQuizzes(quizzes);
+  }
+
+  static async isAnyQuizRegistered(user: User): Promise<boolean> {
+    return !!this.getAllQuizzesForUser(user);
   }
 
   private static async saveAllQuizzes(quizzes: Quiz[]): Promise<void> {
@@ -59,5 +67,11 @@ export class Quiz {
 
     quizzes.push(quiz);
     this.saveAllQuizzes(quizzes);
+  }
+
+  public static async getAllQuizzesForUser(user: User): Promise<Quiz[]> {
+    return (await this.getAllQuizzes()).filter((quiz) =>
+      quiz.userId === user.id
+    );
   }
 }
