@@ -1,7 +1,7 @@
 import "npm:reflect-metadata";
 import { jsonMember, jsonObject, TypedJSON } from "npm:typedjson@1.8.0";
-import { dataDir } from "./utils.ts";
-import { User } from "./user.ts";
+import { dataDir } from "../utils.ts";
+import { User } from "../user.ts";
 
 @jsonObject
 export class Quiz {

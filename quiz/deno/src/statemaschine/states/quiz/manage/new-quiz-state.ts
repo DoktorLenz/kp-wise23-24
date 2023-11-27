@@ -1,6 +1,6 @@
 import { Input } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { IState } from "../../state.ts";
-import { Quiz } from "../../../../quiz.ts";
+import { Quiz } from "../../../../quiz/quiz.ts";
 import { User } from "../../../../user.ts";
 import { EditQuizState } from "./edit-quiz-state.ts";
 import { clearConsole } from "../../../../utils.ts";
