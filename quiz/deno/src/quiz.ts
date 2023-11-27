@@ -32,8 +32,10 @@ export class Quiz {
     Quiz.saveAllQuizzes(quizzes);
   }
 
-  static async isAnyQuizRegistered(user: User): Promise<boolean> {
-    return !!this.getAllQuizzesForUser(user);
+  static isAnyQuizRegistered(user: User): Promise<boolean> {
+    return this.getAllQuizzesForUser(user).then((quizzes) =>
+      quizzes.length > 0
+    );
   }
 
   private static async saveAllQuizzes(quizzes: Quiz[]): Promise<void> {
