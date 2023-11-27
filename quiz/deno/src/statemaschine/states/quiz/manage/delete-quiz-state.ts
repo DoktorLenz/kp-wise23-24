@@ -6,6 +6,8 @@ import { IState } from "../../state.ts";
 import { Quiz } from "../../../../quiz.ts";
 import { User } from "../../../../user.ts";
 import { ManageQuizzesState } from "./manage-quizzes-state.ts";
+import { clearConsole } from "../../../../utils.ts";
+import { sleep } from "https://deno.land/x/sleep@v1.2.1/mod.ts";
 
 export class DeleteQuizState implements IState {
   constructor(private readonly user: User) {}
@@ -28,7 +30,13 @@ export class DeleteQuizState implements IState {
     });
 
     if (quiz !== null) {
+      clearConsole();
+      console.log("Deleting quiz...");
+      await sleep(2);
+      clearConsole();
+      console.log("Quiz deleted!");
       await quiz.delete();
+      await sleep(2);
     }
 
     return new ManageQuizzesState(this.user);
