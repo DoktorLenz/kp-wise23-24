@@ -3,9 +3,10 @@ import {
   SelectOption,
 } from "https://deno.land/x/cliffy@v1.0.0-rc.3/prompt/mod.ts";
 import { IState } from "./state.ts";
-import { getUsers } from "../../user.ts";
 import { LoginState } from "./login-state.ts";
 import { ExitState } from "./exit-state.ts";
+import { RegisterState } from "./register-state.ts";
+import { User } from "../../user.ts";
 
 export class InitState implements IState {
   async run(): Promise<IState> {
@@ -18,7 +19,7 @@ export class InitState implements IState {
 
     const mainOptions: (SelectOption<Action>)[] = [];
 
-    if ((await getUsers()).length > 0) {
+    if (await User.isAnyUserRegistered()) {
       mainOptions.push({ name: "Login", value: Action.Login });
     }
     mainOptions.push({ name: "Register", value: Action.Register });
@@ -34,7 +35,7 @@ export class InitState implements IState {
       case Action.Login:
         return new LoginState();
       case Action.Register:
-        return new InitState();
+        return new RegisterState();
       case Action.Join:
         return new InitState();
       case Action.Exit:
