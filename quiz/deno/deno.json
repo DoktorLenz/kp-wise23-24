@@ -19,5 +19,8 @@
         "singleQuote": true,
         "indentWidth": 8,
         "semiColons": true
+    },
+    "compilerOptions": {
+        "emitDecoratorMetadata": true
     }
 }

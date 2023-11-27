@@ -1,5 +1,27 @@
 {
   "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:reflect-metadata": "npm:reflect-metadata@0.1.13",
+      "npm:typedjson@1.8.0": "npm:typedjson@1.8.0"
+    },
+    "npm": {
+      "reflect-metadata@0.1.13": {
+        "integrity": "sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==",
+        "dependencies": {}
+      },
+      "tslib@2.6.2": {
+        "integrity": "sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==",
+        "dependencies": {}
+      },
+      "typedjson@1.8.0": {
+        "integrity": "sha512-taVJVGebQDagEmVc3Cu6vVVLkWLnxqPcTrkVgbpAsI02ZDDrnHy5zvt1JVqXv4/yztBgZAX1oR07+bkiusGJLQ==",
+        "dependencies": {
+          "tslib": "tslib@2.6.2"
+        }
+      }
+    }
+  },
   "redirects": {
     "https://deno.land/x/dir/mod.ts": "https://deno.land/x/dir@1.5.2/mod.ts",
     "https://deno.land/x/sleep/mod.ts": "https://deno.land/x/sleep@v1.2.1/mod.ts"
