@@ -5,8 +5,10 @@ import {
 import { Quiz } from "../../../../quiz.ts";
 import { LoggedInState } from "../../logged-in/logged-in-state.ts";
 import { User } from "../../../../user.ts";
+import { IState } from "../../state.ts";
+import { NewQuizState } from "./new-quiz-state.ts";
 
-export class ManageQuizzesState {
+export class ManageQuizzesState implements IState {
   constructor(private readonly user: User) {
   }
 
@@ -33,6 +35,7 @@ export class ManageQuizzesState {
 
     switch (action) {
       case Action.New:
+        return new NewQuizState(this.user);
       case Action.Edit:
       case Action.Delete:
         break;
