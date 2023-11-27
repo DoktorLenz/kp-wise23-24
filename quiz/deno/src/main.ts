@@ -1,5 +1,5 @@
-import { clearConsole } from "./utils.ts";
-import { StateMaschine } from "./statemaschine/statemaschine.ts";
+import { StateMaschine } from '@src/statemaschine/statemaschine.ts';
+import { clearConsole } from '@src/utils.ts';
 
 clearConsole();
 
