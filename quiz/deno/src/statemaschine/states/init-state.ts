@@ -17,18 +17,18 @@ export class InitState implements IState {
       Exit = "exit",
     }
 
-    const mainOptions: (SelectOption<Action>)[] = [];
+    const options: (SelectOption<Action>)[] = [];
 
     if (await User.isAnyUserRegistered()) {
-      mainOptions.push({ name: "Login", value: Action.Login });
+      options.push({ name: "Login", value: Action.Login });
     }
-    mainOptions.push({ name: "Register", value: Action.Register });
-    mainOptions.push({ name: "Join Quiz", value: Action.Join });
-    mainOptions.push({ name: "Exit", value: Action.Exit });
+    options.push({ name: "Register", value: Action.Register });
+    options.push({ name: "Join Quiz", value: Action.Join });
+    options.push({ name: "Exit", value: Action.Exit });
 
     const action: string = await Select.prompt({
       message: "Welcome to THE QUIZ APP",
-      options: mainOptions,
+      options: options,
     });
 
     switch (action) {
