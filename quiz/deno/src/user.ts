@@ -6,18 +6,18 @@ import { dataDir } from '@src/utils.ts';
 @jsonObject
 export class User {
 	@jsonMember
-	id?: string;
+	id: string;
 
 	@jsonMember
-	username?: string;
+	username: string;
 
 	@jsonMember
-	password?: string;
+	password: string;
 
 	private constructor(
-		id?: string,
-		username?: string,
-		password?: string,
+		id: string,
+		username: string,
+		password: string,
 	) {
 		this.id = id;
 		this.username = username;

@@ -2,22 +2,25 @@ import 'npm:reflect-metadata';
 import { jsonMember, jsonObject, TypedJSON } from '@typedjson';
 import { User } from '@src/user.ts';
 import { dataDir } from '@src/utils.ts';
+import { Question } from '@src/quiz/question.ts';
 
 @jsonObject
 export class Quiz {
 	@jsonMember
-	id?: string;
+	id: string;
 
 	@jsonMember
-	userId?: string;
+	userId: string;
 
 	@jsonMember
-	name?: string;
+	name: string;
+
+	questions: Question<unknown>[] = [];
 
 	private constructor(
-		id?: string,
-		userId?: string,
-		name?: string,
+		id: string,
+		userId: string,
+		name: string,
 	) {
 		this.id = id;
 		this.userId = userId;
@@ -65,12 +68,13 @@ export class Quiz {
 		}
 	}
 
-	public static async create(user: User, name: string): Promise<void> {
+	public static async create(user: User, name: string): Promise<string> {
 		const quizzes = await this.getAllQuizzes();
 		const quiz = new Quiz(crypto.randomUUID(), user.id, name);
 
 		quizzes.push(quiz);
 		this.saveAllQuizzes(quizzes);
+		return quiz.id;
 	}
 
 	public static async getAllQuizzesForUser(user: User): Promise<Quiz[]> {
