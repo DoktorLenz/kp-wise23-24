@@ -33,7 +33,11 @@ export class User {
 
   static async create(username: string, password: string): Promise<void> {
     const users = await this.getAllUsers();
-    const user = new User("", username, bcrypt.hashSync(password));
+    const user = new User(
+      crypto.randomUUID(),
+      username,
+      bcrypt.hashSync(password),
+    );
 
     users.push(user);
     this.saveAllUsers(users);
