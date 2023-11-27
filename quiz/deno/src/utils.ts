@@ -1,9 +1,7 @@
-export function clearConsole() {
-	console.log('\x1Bc');
-}
+import dir from "https://deno.land/x/dir@1.5.2/mod.ts";
 
-export interface ISerializable<T extends I, I> {
-	new (): T;
-	serialize(): string;
-	deserialize(data: I): T;
+export const dataDir = `${dir("data")}/quiz`;
+
+export function clearConsole() {
+  console.log("\x1Bc");
 }
