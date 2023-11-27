@@ -100,7 +100,6 @@ export class User implements IUser {
     if (!user) {
       throw new Error("NO USER");
     }
-    console.log(password);
     const isPasswordValid = user.isPasswordValid(password);
     if (!isPasswordValid) {
       throw new Error("Wrong credentials");

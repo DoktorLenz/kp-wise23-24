@@ -10,7 +10,6 @@ import { LoggedInState } from "./logged-in/logged-in-state.ts";
 export class LoginState implements IState {
   async run(): Promise<IState> {
     const username = await Input.prompt("Username: ");
-    console.log(username);
     const password = await Secret.prompt("Password: ");
 
     const user = await User.checkLogin(username, password);
