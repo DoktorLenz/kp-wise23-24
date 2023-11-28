@@ -1,5 +1,4 @@
 import * as bcrypt from '@bcrypt';
-import 'npm:reflect-metadata';
 import { jsonMember, jsonObject, TypedJSON } from '@typedjson';
 import { dataDir } from '@src/utils.ts';
 

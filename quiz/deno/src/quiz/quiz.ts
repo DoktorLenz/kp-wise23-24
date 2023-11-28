@@ -1,5 +1,4 @@
-import 'npm:reflect-metadata';
-import { jsonMember, jsonObject, TypedJSON } from '@typedjson';
+import { jsonArrayMember, jsonMember, jsonObject, TypedJSON } from '@typedjson';
 import { User } from '@src/user.ts';
 import { dataDir } from '@src/utils.ts';
 import { Question } from '@src/quiz/question.ts';
@@ -15,6 +14,7 @@ export class Quiz {
 	@jsonMember
 	name: string;
 
+	@jsonArrayMember(Question<unknown>)
 	questions: Question<unknown>[] = [];
 
 	private constructor(
@@ -32,6 +32,28 @@ export class Quiz {
 		const index = quizzes.findIndex((quiz) => quiz.id === this.id);
 
 		quizzes.splice(index, 1);
+		Quiz.saveAllQuizzes(quizzes);
+	}
+
+	public addQuestion(question: Question<unknown>): void {
+		this.questions.push(question);
+	}
+
+	public removeQuestion(id: string): void {
+		this.questions = this.questions.filter((question) =>
+			question.id !== id
+		);
+	}
+
+	public async save(): Promise<void> {
+		const quizzes = await Quiz.getAllQuizzes();
+		const index = quizzes.findIndex((quiz) => quiz.id === this.id);
+
+		if (index === -1) {
+			quizzes.push(this);
+		} else {
+			quizzes[index] = this;
+		}
 		Quiz.saveAllQuizzes(quizzes);
 	}
 
@@ -68,18 +90,31 @@ export class Quiz {
 		}
 	}
 
-	public static async create(user: User, name: string): Promise<string> {
+	public static async create(user: User, name: string): Promise<Quiz> {
 		const quizzes = await this.getAllQuizzes();
 		const quiz = new Quiz(crypto.randomUUID(), user.id, name);
 
 		quizzes.push(quiz);
 		this.saveAllQuizzes(quizzes);
-		return quiz.id;
+		return quiz;
 	}
 
 	public static async getAllQuizzesForUser(user: User): Promise<Quiz[]> {
 		return (await this.getAllQuizzes()).filter((quiz) =>
 			quiz.userId === user.id
 		);
+	}
+
+	public static async getQuizById(user: User, id: string): Promise<Quiz> {
+		const quizzes = await this.getAllQuizzes();
+		const quiz = quizzes.find((quiz) =>
+			quiz.id === id && quiz.userId === user.id
+		);
+
+		if (!quiz) {
+			throw new Error(`Acces Violation`);
+		}
+
+		return quiz;
 	}
 }

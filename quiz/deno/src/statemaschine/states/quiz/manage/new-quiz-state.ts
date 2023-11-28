@@ -21,9 +21,9 @@ export class NewQuizState implements IState {
 		await sleep(2);
 		clearConsole();
 		console.log('Quiz created!');
-		Quiz.create(this.user, quizName);
+		const quizId = await Quiz.create(this.user, quizName);
 		await sleep(2);
 
-		return new EditQuizState(this.user, quizName);
+		return new EditQuizState(this.user, quizId);
 	}
 }
