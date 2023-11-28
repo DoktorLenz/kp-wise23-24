@@ -88,7 +88,7 @@ export class OnEditQuizState implements IState {
 
 		bodyContent.push([
 			new Cell(
-				'[+] Add Question \r\n [-] Delete Question \r\n [Enter] Edit Question \r\n [Esc] Exit',
+				'[+] Add Question \r\n [-] Delete Question \r\n [Enter] Edit Question \r\n [Esc] Back',
 			).colSpan(4).align('center').border(false),
 		]);
 
