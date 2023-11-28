@@ -1,16 +1,16 @@
 import * as bcrypt from '@bcrypt';
-import { jsonMember, jsonObject, TypedJSON } from '@typedjson';
 import { dataDir } from '@src/utils.ts';
+import { Decoverto, model, property } from '@decoverto';
 
-@jsonObject
+@model()
 export class User {
-	@jsonMember
+	@property()
 	id: string;
 
-	@jsonMember
+	@property()
 	username: string;
 
-	@jsonMember
+	@property()
 	password: string;
 
 	private constructor(
@@ -49,27 +49,30 @@ export class User {
 
 	private static async saveAllUsers(users: User[]): Promise<void> {
 		const encoder = new TextEncoder();
-		const serializer = new TypedJSON(User);
+		const decoverto = new Decoverto();
 
+		const raw = decoverto.type(User).instanceArrayToRaw(users);
 		await Deno.mkdir(dataDir, { recursive: true });
 
 		await Deno.writeFile(
 			`${dataDir}/users.json`,
-			encoder.encode(serializer.stringifyAsArray(users)),
+			encoder.encode(raw),
 			{ create: true },
 		);
 	}
 
 	private static async getAllUsers(): Promise<User[]> {
 		const decoder = new TextDecoder();
-		const serializer = new TypedJSON(User);
+		const decoverto = new Decoverto();
 
 		try {
-			const content = await Deno.readFile(
+			const raw = await Deno.readFile(
 				`${dataDir}/users.json`,
 			);
 
-			return serializer.parseAsArray(decoder.decode(content));
+			return decoverto.type(User).rawToInstanceArray(
+				decoder.decode(raw),
+			);
 		} catch (_error) {
 			return [];
 		}

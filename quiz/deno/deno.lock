@@ -2,10 +2,17 @@
   "version": "3",
   "packages": {
     "specifiers": {
+      "npm:decoverto@1.0.4": "npm:decoverto@1.0.4",
       "npm:reflect-metadata": "npm:reflect-metadata@0.1.13",
       "npm:typedjson@1.8.0": "npm:typedjson@1.8.0"
     },
     "npm": {
+      "decoverto@1.0.4": {
+        "integrity": "sha512-w3OpJ8NQgnmxzQcJxJw25oNoPnKnfSQ9APYQrZ2mIBF35shPgQvroQ5x+XejQPbncfVn6PjnTLR7rS6bdiciFA==",
+        "dependencies": {
+          "tslib": "tslib@2.6.2"
+        }
+      },
       "reflect-metadata@0.1.13": {
         "integrity": "sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==",
         "dependencies": {}

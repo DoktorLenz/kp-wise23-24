@@ -25,6 +25,7 @@
     },
     "imports": {
         "@typedjson": "npm:typedjson@1.8.0",
+        "@decoverto": "npm:decoverto@1.0.4",
         "@sleep": "https://deno.land/x/sleep@v1.2.1/mod.ts",
         "@cliffy/": "https://deno.land/x/cliffy@v1.0.0-rc.3/",
         "@bcrypt": "https://deno.land/x/bcrypt@v0.4.1/mod.ts",
