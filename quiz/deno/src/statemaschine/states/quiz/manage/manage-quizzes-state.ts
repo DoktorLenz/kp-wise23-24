@@ -5,6 +5,7 @@ import { LoggedInState } from '@states/logged-in/logged-in-state.ts';
 import { IState } from '@states/state.ts';
 import { DeleteQuizState } from '@states/quiz/manage/delete-quiz-state.ts';
 import { NewQuizState } from '@states/quiz/manage/new-quiz-state.ts';
+import { EditQuizState } from '@states/quiz/manage/edit-quiz-state.ts';
 
 export class ManageQuizzesState implements IState {
 	constructor(private readonly user: User) {
@@ -38,7 +39,7 @@ export class ManageQuizzesState implements IState {
 			case Action.New:
 				return new NewQuizState(this.user);
 			case Action.Edit:
-				break;
+				return new EditQuizState(this.user);
 			case Action.Delete:
 				return new DeleteQuizState(this.user);
 			case Action.Back:

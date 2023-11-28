@@ -1,18 +1,23 @@
 import { Toggle } from '@cliffy/prompt/mod.ts';
-import { jsonMember, jsonObject } from '@typedjson';
+import { Any, inherits, model, property } from '@decoverto';
 
-@jsonObject
+@model({
+	inheritance: {
+		discriminatorKey: '__type',
+		strategy: 'discriminator',
+	},
+})
 export abstract class Question<T> {
-	@jsonMember
+	@property()
 	id: string;
 
-	@jsonMember
+	@property()
 	title: string;
 
-	@jsonMember
+	@property()
 	description: string;
 
-	@jsonMember
+	@property(Any)
 	solution: T;
 
 	protected constructor(
@@ -32,11 +37,12 @@ export abstract class Question<T> {
 	abstract get solutionText(): string;
 }
 
-@jsonObject
+@inherits({ discriminator: 'TrueFalseQuestion' })
+@model()
 export class TrueFalseQuestion extends Question<boolean> {
-	@jsonMember
+	@property()
 	trueText: string;
-	@jsonMember
+	@property()
 	falseText: string;
 
 	get solutionText(): string {

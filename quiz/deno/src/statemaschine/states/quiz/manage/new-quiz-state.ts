@@ -4,7 +4,7 @@ import { Quiz } from '@src/quiz/quiz.ts';
 import { User } from '@src/user.ts';
 import { clearConsole } from '@src/utils.ts';
 import { IState } from '@states/state.ts';
-import { EditQuizState } from '@states/quiz/manage/edit-quiz-state.ts';
+import { OnEditQuizState } from './on-edit-quiz-state.ts';
 
 export class NewQuizState implements IState {
 	constructor(private readonly user: User) {}
@@ -24,6 +24,6 @@ export class NewQuizState implements IState {
 		const quizId = await Quiz.create(this.user, quizName);
 		await sleep(2);
 
-		return new EditQuizState(this.user, quizId);
+		return new OnEditQuizState(this.user, quizId);
 	}
 }

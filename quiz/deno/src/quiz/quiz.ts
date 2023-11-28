@@ -1,20 +1,20 @@
-import { jsonArrayMember, jsonMember, jsonObject, TypedJSON } from '@typedjson';
 import { User } from '@src/user.ts';
 import { dataDir } from '@src/utils.ts';
 import { Question } from '@src/quiz/question.ts';
+import { array, Decoverto, model, property } from '@decoverto';
 
-@jsonObject
+@model()
 export class Quiz {
-	@jsonMember
+	@property()
 	id: string;
 
-	@jsonMember
+	@property()
 	userId: string;
 
-	@jsonMember
+	@property()
 	name: string;
 
-	@jsonArrayMember(Question<unknown>)
+	@property(array(() => Question))
 	questions: Question<unknown>[] = [];
 
 	private constructor(
@@ -65,26 +65,30 @@ export class Quiz {
 
 	private static async saveAllQuizzes(quizzes: Quiz[]): Promise<void> {
 		const encoder = new TextEncoder();
-		const serializer = new TypedJSON(Quiz);
+		const decoverto = new Decoverto();
 
+		const raw = decoverto.type(Quiz).instanceArrayToRaw(quizzes);
 		await Deno.mkdir(dataDir, { recursive: true });
 
 		await Deno.writeFile(
 			`${dataDir}/quizzes.json`,
-			encoder.encode(serializer.stringifyAsArray(quizzes)),
+			encoder.encode(raw),
 			{ create: true },
 		);
 	}
 
 	private static async getAllQuizzes(): Promise<Quiz[]> {
 		const decoder = new TextDecoder();
-		const serializer = new TypedJSON(Quiz);
+		const decoverto = new Decoverto();
 
 		try {
 			const content = await Deno.readFile(
 				`${dataDir}/quizzes.json`,
 			);
-			return serializer.parseAsArray(decoder.decode(content));
+			const quizzes = decoverto.type(Quiz).rawToInstanceArray(
+				decoder.decode(content),
+			);
+			return quizzes;
 		} catch (_error) {
 			return [];
 		}

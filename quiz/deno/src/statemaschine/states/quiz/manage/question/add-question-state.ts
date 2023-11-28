@@ -1,7 +1,7 @@
 import { IState } from '@states/state.ts';
 import { User } from '@src/user.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
-import { EditQuizState } from '@states/quiz/manage/edit-quiz-state.ts';
+import { OnEditQuizState } from '../on-edit-quiz-state.ts';
 import { Select } from '@cliffy/prompt/mod.ts';
 import { TrueFalseQuestion } from '@src/quiz/question.ts';
 
@@ -58,6 +58,6 @@ export class AddQuestionState implements IState {
 				break;
 		}
 
-		return new EditQuizState(this.user, this.quiz);
+		return new OnEditQuizState(this.user, this.quiz);
 	}
 }
