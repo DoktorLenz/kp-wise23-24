@@ -1,5 +1,6 @@
-import { Toggle } from '@cliffy/prompt/mod.ts';
+import { Input, Toggle } from '@cliffy/prompt/mod.ts';
 import { Any, inherits, model, property } from '@decoverto';
+import { clearConsole } from '@src/utils.ts';
 
 @model({
 	inheritance: {
@@ -12,19 +13,23 @@ export abstract class Question<T> {
 	id: string;
 
 	@property()
-	title: string;
+	title?: string;
 
-	@property()
-	description: string;
+	@property({
+		toInstance: (value: string | undefined) => value,
+		toPlain: (value: string | undefined) =>
+			value === '' ? undefined : value,
+	})
+	description?: string;
 
 	@property(Any)
-	solution: T;
+	solution?: T;
 
 	protected constructor(
 		id: string,
-		title: string,
-		description: string,
-		solution: T,
+		title?: string,
+		description?: string,
+		solution?: T,
 	) {
 		this.id = id;
 		this.title = title;
@@ -34,48 +39,38 @@ export abstract class Question<T> {
 
 	abstract checkAnswer(answer: T): boolean;
 	abstract ask(): Promise<T>;
+	abstract edit(): Promise<void>;
 	abstract get solutionText(): string;
 }
 
-@inherits({ discriminator: 'TrueFalseQuestion' })
+@inherits({ discriminator: 'ToggleQuestion' })
 @model()
-export class TrueFalseQuestion extends Question<boolean> {
+export class ToggleQuestion extends Question<boolean> {
 	@property()
-	trueText: string;
+	trueText?: string;
 	@property()
-	falseText: string;
+	falseText?: string;
 
 	get solutionText(): string {
-		return this.solution ? this.trueText : this.falseText;
+		return (this.solution ? this.trueText : this.falseText) ?? '';
 	}
 
 	protected constructor(
 		id: string,
-		title: string,
-		description: string,
-		solution: boolean,
-		trueText: string = 'Yes',
-		falseText: string = 'No',
+		title?: string,
+		description?: string,
+		solution?: boolean,
+		trueText?: string,
+		falseText?: string,
 	) {
 		super(id, title, description, solution);
 		this.trueText = trueText;
 		this.falseText = falseText;
 	}
 
-	static create(
-		title: string,
-		description: string,
-		solution: boolean,
-		trueText = 'Yes',
-		falseText = 'No',
-	): TrueFalseQuestion {
-		return new TrueFalseQuestion(
+	static create(): ToggleQuestion {
+		return new ToggleQuestion(
 			crypto.randomUUID(),
-			title,
-			description,
-			solution,
-			trueText,
-			falseText,
 		);
 	}
 
@@ -89,9 +84,46 @@ export class TrueFalseQuestion extends Question<boolean> {
 			`color: #00f; font-weight: bold;`,
 		);
 		return Toggle.prompt({
-			message: this.description,
+			message: this.description ?? '',
+			active: this.trueText ?? 'Yes',
+			inactive: this.falseText ?? 'No',
+		});
+	}
+
+	async edit(): Promise<void> {
+		clearConsole();
+		this.title = await Input.prompt({
+			message: 'Please enter the title of the question',
+			default: this.title,
+			minLength: 1,
+			maxLength: 100,
+		});
+
+		this.description = await Input.prompt({
+			message: 'Please enter the description of the question',
+			default: this.description,
+			maxLength: 100,
+		});
+
+		this.trueText = await Input.prompt({
+			message: 'Please enter the text for option 1',
+			default: this.trueText,
+			minLength: 1,
+			maxLength: 100,
+		});
+
+		this.falseText = await Input.prompt({
+			message: 'Please enter the text for option 2',
+			default: this.falseText,
+			minLength: 1,
+			maxLength: 100,
+		});
+
+		this.solution = await Toggle.prompt({
+			message: this.title,
 			active: this.trueText,
 			inactive: this.falseText,
+			default: this.solution,
 		});
 	}
 }

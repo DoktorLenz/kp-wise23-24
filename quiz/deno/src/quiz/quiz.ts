@@ -35,8 +35,9 @@ export class Quiz {
 		Quiz.saveAllQuizzes(quizzes);
 	}
 
-	public addQuestion(question: Question<unknown>): void {
+	public addQuestion(question: Question<unknown>): Question<unknown> {
 		this.questions.push(question);
+		return question;
 	}
 
 	public removeQuestion(id: string): void {

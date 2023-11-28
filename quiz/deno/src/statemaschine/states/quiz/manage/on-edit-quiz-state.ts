@@ -8,6 +8,7 @@ import { keypress, KeyPressEvent } from '@cliffy/keypress/mod.ts';
 import { bold } from '@cliffy/prompt/deps.ts';
 import { tty } from '@cliffy/ansi/tty.ts';
 import { AddQuestionState } from '@states/quiz/manage/question/add-question-state.ts';
+import { EditQuestionState } from '@states/quiz/manage/question/edit-question-state.ts';
 
 export class OnEditQuizState implements IState {
 	constructor(
@@ -52,6 +53,12 @@ export class OnEditQuizState implements IState {
 					carretIndex = questioncount - 1;
 				}
 				await this.renderTable(this.quiz, carretIndex);
+			} else if (event.key === 'return') {
+				return new EditQuestionState(
+					this.user,
+					this.quiz,
+					this.quiz.questions[carretIndex],
+				);
 			} else if (event.key === 'escape') {
 				await this.quiz.save();
 				break;
