@@ -2,7 +2,7 @@ import { InitState } from '@states/init-state.ts';
 import { IState } from '@states/state.ts';
 import { clearConsole } from '@src/utils.ts';
 import { User } from '@src/user.ts';
-import { OnEditQuizState } from './states/quiz/manage/on-edit-quiz-state.ts';
+import { EditQuizState } from './states/quiz/manage/edit-quiz-state.ts';
 import { Question } from '@src/quiz/question.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
 

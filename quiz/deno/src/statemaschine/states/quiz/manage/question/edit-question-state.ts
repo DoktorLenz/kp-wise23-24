@@ -2,7 +2,7 @@ import { IState } from '@states/state.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
 import { User } from '@src/user.ts';
 import { Question } from '@src/quiz/question.ts';
-import { OnEditQuizState } from '@states/quiz/manage/on-edit-quiz-state.ts';
+import { EditQuizState } from '../edit-quiz-state.ts';
 
 export class EditQuestionState implements IState {
 	constructor(
@@ -13,6 +13,6 @@ export class EditQuestionState implements IState {
 
 	async run(): Promise<IState> {
 		await this.question.edit();
-		return new OnEditQuizState(this.user, this.quiz);
+		return new EditQuizState(this.user, this.quiz);
 	}
 }

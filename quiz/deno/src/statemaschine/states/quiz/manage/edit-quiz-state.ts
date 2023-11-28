@@ -1,37 +1,121 @@
 import { User } from '@src/user.ts';
-import { Select, SelectOption } from '@cliffy/prompt/mod.ts';
-import { Quiz } from '@src/quiz/quiz.ts';
-import { OnEditQuizState } from '@states/quiz/manage/on-edit-quiz-state.ts';
-import { ManageQuizzesState } from '@states/quiz/manage/manage-quizzes-state.ts';
 import { IState } from '@states/state.ts';
+import { ManageQuizzesState } from '@states/quiz/manage/manage-quizzes-state.ts';
+import { Quiz } from '@src/quiz/quiz.ts';
+import { Cell, Table, TableType } from '@cliffy/table/mod.ts';
+import { Row, RowType } from '@cliffy/table/row.ts';
+import { keypress, KeyPressEvent } from '@cliffy/keypress/mod.ts';
+import { bold } from '@cliffy/prompt/deps.ts';
+import { tty } from '@cliffy/ansi/tty.ts';
+import { AddQuestionState } from '@states/quiz/manage/question/add-question-state.ts';
+import { EditQuestionState } from '@states/quiz/manage/question/edit-question-state.ts';
+import { clearConsole } from '@src/utils.ts';
+import { sleep } from '@sleep';
 
 export class EditQuizState implements IState {
 	constructor(
 		private readonly user: User,
+		private readonly quiz: Quiz,
 	) {}
 
 	async run() {
-		const options: (SelectOption<Quiz | null>)[] =
-			(await Quiz.getAllQuizzesForUser(this.user)).map(
-				(quiz) => {
-					return { name: quiz.name, value: quiz };
-				},
-			);
+		let carretIndex = 0;
+		let questioncount = this.quiz.questions.length;
 
-		options.unshift({ name: '[Back]', value: null });
+		tty.cursorTo(0, 0);
+		await this.renderTable(this.quiz, carretIndex);
 
-		const quiz = await Select.prompt({
-			message: 'Which quiz should be edited?',
-			options: options,
-			maxRows: 10,
-			search: true,
-			searchLabel: 'Search for quiz',
-		});
-
-		if (quiz !== null) {
-			return new OnEditQuizState(this.user, quiz);
+		for await (const event: KeyPressEvent of keypress()) {
+			if (event.key === 'up') {
+				tty.cursorLeft.eraseDown();
+				carretIndex = carretIndex === 0
+					? questioncount - 1
+					: carretIndex - 1;
+				await this.renderTable(this.quiz, carretIndex);
+			} else if (event.key === 'down') {
+				tty.cursorLeft.eraseDown();
+				carretIndex = carretIndex === questioncount - 1
+					? 0
+					: carretIndex + 1;
+				await this.renderTable(this.quiz, carretIndex);
+			} else if (event.key === '+') {
+				return new AddQuestionState(
+					this.user,
+					this.quiz,
+				);
+			} else if (event.key === '-') {
+				if (questioncount === 0) {
+					continue;
+				}
+				this.quiz.removeQuestion(
+					this.quiz.questions[carretIndex].id,
+				);
+				questioncount = this.quiz.questions.length;
+				if (carretIndex >= questioncount) {
+					carretIndex = questioncount - 1;
+				}
+				await this.renderTable(this.quiz, carretIndex);
+			} else if (event.key === 'return') {
+				return new EditQuestionState(
+					this.user,
+					this.quiz,
+					this.quiz.questions[carretIndex],
+				);
+			} else if (event.key === 'escape') {
+				clearConsole();
+				console.log('Saving quiz...');
+				await sleep(2);
+				clearConsole();
+				console.log('Quiz saved!');
+				await this.quiz.save();
+				await sleep(2);
+				break;
+			} else if (event.ctrlKey && event.key === 'c') {
+				Deno.exit(0);
+			}
 		}
 
 		return new ManageQuizzesState(this.user);
+	}
+
+	private async renderTable(
+		quiz: Quiz,
+		carretIndex: number,
+	): Promise<void> {
+		tty.cursorLeft.eraseDown();
+		const bodyContent: TableType<RowType> = [];
+
+		quiz.questions.forEach((question, index) => {
+			bodyContent.push([
+				`${index === carretIndex ? '>' : ' '}`,
+				question.title,
+				question.description,
+				question.solutionText,
+			]);
+		});
+
+		bodyContent.push([
+			new Cell(
+				'[+] Add Question \r\n [-] Delete Question \r\n [Enter] Edit Question \r\n [Esc] Back',
+			).colSpan(4).align('center').border(false),
+		]);
+
+		new Table()
+			.header(
+				new Row(
+					' ',
+					bold('Question'),
+					bold('Description'),
+					bold('Solution'),
+				),
+			)
+			.body(bodyContent)
+			.padding(1)
+			.indent(2)
+			.border()
+			.render();
+
+		tty.cursorUp(quiz.questions.length + 1);
+		tty.cursorTo(0, 0);
 	}
 }

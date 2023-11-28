@@ -14,6 +14,13 @@ export class Quiz {
 	@property()
 	name: string;
 
+	@property({
+		toInstance: (value: string | undefined) => value,
+		toPlain: (value: string | undefined) =>
+			value === '' ? undefined : value,
+	})
+	description?: string;
+
 	@property(array(() => Question))
 	questions: Question<unknown>[] = [];
 
@@ -27,12 +34,13 @@ export class Quiz {
 		this.name = name;
 	}
 
-	public async delete(): Promise<void> {
+	public async delete(): Promise<Quiz[]> {
 		const quizzes = await Quiz.getAllQuizzes();
 		const index = quizzes.findIndex((quiz) => quiz.id === this.id);
 
 		quizzes.splice(index, 1);
 		Quiz.saveAllQuizzes(quizzes);
+		return quizzes;
 	}
 
 	public addQuestion(question: Question<unknown>): Question<unknown> {
