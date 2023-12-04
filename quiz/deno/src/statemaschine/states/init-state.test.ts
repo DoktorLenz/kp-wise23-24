@@ -77,4 +77,15 @@ describe('InitState', () => {
 
 		expect(nextState).to.be.instanceOf(ExitState);
 	});
+
+	it('should return InitState when action is unknown', async () => {
+		sandbox.stub(Select, 'prompt').returns(
+			Promise.resolve('unknown'),
+		);
+
+		const initState = new InitState();
+		const nextState = await initState.run();
+
+		expect(nextState).to.be.instanceOf(InitState);
+	});
 });
