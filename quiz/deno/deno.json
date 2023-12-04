@@ -1,7 +1,9 @@
 {
     "tasks": {
         "exec": "deno run --allow-write --allow-read --allow-env src/main.ts",
-        "debug": "deno run --inspect-brk --allow-write --allow-read src/main.ts"
+        "debug": "deno run --inspect-brk --allow-write --allow-read src/main.ts",
+        "test": "deno test --allow-all",
+        "test-coverage": "deno test --allow-all --coverage=coverage/raw && deno coverage coverage --lcov --output=coverage/lcov.info && perl C:/ProgramData/chocolatey/lib/lcov/tools/bin/genhtml -o coverage/html coverage/lcov.info"
     },
     "lint": {
         "include": [
