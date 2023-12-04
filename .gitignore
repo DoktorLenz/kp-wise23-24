@@ -11,5 +11,5 @@
 # Built Visual Studio Code Extensions
 *.vsix
 
-# Cliffy Code
-quiz/deno/cliffy/**/*
+# Deno coverage
+quiz/deno/coverage
