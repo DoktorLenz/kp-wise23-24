@@ -21,7 +21,7 @@ export class ManageQuizzesState implements IState {
 		tty.cursorTo(0, 0);
 		await this.renderTable(quizzes, carretIndex);
 
-		for await (const event: KeyPressEvent of keypress()) {
+		for await (const event of keypress()) {
 			if (event.key === 'up') {
 				tty.cursorLeft.eraseDown();
 				carretIndex = carretIndex === 0
