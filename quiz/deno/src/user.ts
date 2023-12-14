@@ -30,7 +30,7 @@ export class User {
 		return false;
 	}
 
-	static async create(username: string, password: string): Promise<void> {
+	static async create(username: string, password: string): Promise<User> {
 		const users = await this.getAllUsers();
 		const user = new User(
 			crypto.randomUUID(),
@@ -39,7 +39,8 @@ export class User {
 		);
 
 		users.push(user);
-		this.saveAllUsers(users);
+		await this.saveAllUsers(users);
+		return user;
 	}
 
 	public static async isAnyUserRegistered(): Promise<boolean> {

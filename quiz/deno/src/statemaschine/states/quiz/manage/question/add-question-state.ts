@@ -3,8 +3,8 @@ import { User } from '@src/user.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
 import { EditQuizState } from '../edit-quiz-state.ts';
 import { Select } from '@cliffy/prompt/mod.ts';
-import { ToggleQuestion } from '@src/quiz/question.ts';
 import { EditQuestionState } from '@states/quiz/manage/question/edit-question-state.ts';
+import { ToggleQuestion } from '@src/quiz/toggle-question.ts';
 
 export class AddQuestionState implements IState {
 	constructor(private readonly user: User, private readonly quiz: Quiz) {}
