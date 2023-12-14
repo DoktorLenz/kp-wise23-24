@@ -65,7 +65,7 @@ export class ToggleQuestion extends Question<boolean> {
 		});
 
 		this.solution = await Toggle.prompt({
-			message: this.title,
+			message: this.title ?? '',
 			active: this.trueText,
 			inactive: this.falseText,
 			default: this.solution,
