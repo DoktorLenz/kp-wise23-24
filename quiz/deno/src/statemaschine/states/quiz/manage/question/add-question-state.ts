@@ -5,6 +5,7 @@ import { EditQuizState } from '../edit-quiz-state.ts';
 import { Select } from '@cliffy/prompt/mod.ts';
 import { EditQuestionState } from '@states/quiz/manage/question/edit-question-state.ts';
 import { ToggleQuestion } from '@src/quiz/toggle-question.ts';
+import { MultipleChoiceQuestion } from '@src/quiz/multiple-choice-question.ts';
 
 export class AddQuestionState implements IState {
 	constructor(private readonly user: User, private readonly quiz: Quiz) {}
@@ -13,7 +14,6 @@ export class AddQuestionState implements IState {
 		enum Action {
 			Toggle = 'toggle',
 			MultipleChoice = 'multiplechoice',
-			MultipleAnswer = 'multipleanswer',
 			Open = 'open',
 		}
 
@@ -27,10 +27,6 @@ export class AddQuestionState implements IState {
 				{
 					name: 'Multiple Choice',
 					value: Action.MultipleChoice,
-				},
-				{
-					name: 'Multiple Answer',
-					value: Action.MultipleAnswer,
 				},
 				{
 					name: 'Open',
@@ -50,10 +46,16 @@ export class AddQuestionState implements IState {
 					question,
 				);
 			}
-			case Action.MultipleChoice:
-				break;
-			case Action.MultipleAnswer:
-				break;
+			case Action.MultipleChoice: {
+				const question = this.quiz.addQuestion(
+					MultipleChoiceQuestion.create(),
+				);
+				return new EditQuestionState(
+					this.user,
+					this.quiz,
+					question,
+				);
+			}
 			case Action.Open:
 				break;
 		}
