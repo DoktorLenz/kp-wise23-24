@@ -31,28 +31,32 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 	override async edit(): Promise<void> {
 		await super.edit();
 
-		let newChoices = await List.prompt({
+		const newChoices = await List.prompt({
 			message: 'Please enter the choices separated by a comma',
 			minTags: 2,
 			default: this.choices.map((choice) => choice.name),
 		});
 
-		this.choices = this.choices.filter((choice) =>
+		const filteredChoices = this.choices.filter((choice) =>
 			newChoices.includes(choice.name)
 		);
-		newChoices = newChoices.filter((choice) =>
+
+		const newChoicesToAdd = newChoices.filter((choice) =>
 			!this.choices.map((choice) => choice.name).includes(
 				choice,
 			)
 		);
 
-		this.choices.push(...newChoices.map((choice) => {
-			return {
-				name: choice,
-				value: crypto.randomUUID(),
-				checked: false,
-			};
-		}));
+		this.choices = [
+			...filteredChoices,
+			...newChoicesToAdd.map((choice) => {
+				return {
+					name: choice,
+					value: crypto.randomUUID(),
+					checked: false,
+				};
+			}),
+		];
 
 		const checkedChoices: string[] = await Checkbox.prompt<string>({
 			message: this.title ?? '',
