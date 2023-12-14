@@ -38,11 +38,8 @@ export class ToggleQuestion extends Question<boolean> {
 		return answer === this.solution;
 	}
 
-	ask(): Promise<boolean> {
-		console.log(
-			`%c${this.title}`,
-			`color: #00f; font-weight: bold;`,
-		);
+	override ask(): Promise<boolean> {
+		this.printTitle();
 		return Toggle.prompt({
 			message: this.description ?? '',
 			active: this.trueText ?? 'Yes',
@@ -50,20 +47,8 @@ export class ToggleQuestion extends Question<boolean> {
 		});
 	}
 
-	async edit(): Promise<void> {
-		clearConsole();
-		this.title = await Input.prompt({
-			message: 'Please enter the title of the question',
-			default: this.title,
-			minLength: 1,
-			maxLength: 100,
-		});
-
-		this.description = await Input.prompt({
-			message: 'Please enter the description of the question',
-			default: this.description,
-			maxLength: 100,
-		});
+	override async edit(): Promise<void> {
+		await super.edit();
 
 		this.trueText = await Input.prompt({
 			message: 'Please enter the text for option 1',
