@@ -1,6 +1,5 @@
 import { inherits, model, property } from '@decoverto';
 import { Question } from '@src/quiz/question.ts';
-import { clearConsole } from '@src/utils.ts';
 import { Input, Toggle } from '@cliffy/prompt/mod.ts';
 
 @inherits({ discriminator: 'ToggleQuestion' })

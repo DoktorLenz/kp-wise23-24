@@ -1,14 +1,32 @@
 import { Question } from '@src/quiz/question.ts';
-import { inherits, model, property } from '@decoverto';
+import { inherits, map, MapShape, model, property } from '@decoverto';
 import { Checkbox, List } from '@cliffy/prompt/mod.ts';
 
-export type Choice = { name: string; value: string; checked: boolean };
+type Option = { name: string; value: string };
 
 @inherits({ discriminator: 'MultipleChoiceQuestion' })
 @model()
 export class MultipleChoiceQuestion extends Question<string[]> {
-	// @property()
-	choices: Choice[] = [];
+	/**
+	 * The options for this question
+	 *
+	 * key: text
+	 *
+	 * value: id
+	 */
+	@property(map(() => String, () => String, { shape: MapShape.Array }))
+	options: Map<string, string>;
+
+	protected constructor(
+		id: string,
+		title?: string,
+		description?: string,
+		solution?: string[],
+		options?: Map<string, string>,
+	) {
+		super(id, title, description, solution);
+		this.options = options ?? new Map();
+	}
 
 	static create(): MultipleChoiceQuestion {
 		return new MultipleChoiceQuestion(
@@ -16,63 +34,53 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 		);
 	}
 
-	checkAnswer(answer: string[]): boolean {
-		return false;
+	ask(): Promise<string[]> {
+		throw new Error('Method not implemented.');
 	}
 
-	override ask(): Promise<string[]> {
-		this.printTitle();
-		return Checkbox.prompt<string>({
-			message: this.description ?? '',
-			options: this.choices,
-		});
+	checkAnswer(answer: string[]): boolean {
+		const shouldBeAnswered = this.solution ?? [];
+
+		const wrongs = answer.filter((id) =>
+			!shouldBeAnswered.includes(id)
+		).concat(shouldBeAnswered.filter((id) => !answer.includes(id)));
+
+		return wrongs.length === 0;
 	}
 
 	override async edit(): Promise<void> {
 		await super.edit();
 
-		const newChoices = await List.prompt({
+		const newOptions: string[] = await List.prompt({
 			message: 'Please enter the choices separated by a comma',
 			minTags: 2,
-			default: this.choices.map((choice) => choice.name),
+			default: Array.from(this.options.keys()),
 		});
 
-		const filteredChoices = this.choices.filter((choice) =>
-			newChoices.includes(choice.name)
+		const removedOptions = Array.from(this.options.values()).filter(
+			(option) => !newOptions.includes(option),
 		);
 
-		const newChoicesToAdd = newChoices.filter((choice) =>
-			!this.choices.map((choice) => choice.name).includes(
-				choice,
-			)
-		);
+		removedOptions.forEach((option) => {
+			this.options.delete(option);
+		});
 
-		this.choices = [
-			...filteredChoices,
-			...newChoicesToAdd.map((choice) => {
-				return {
-					name: choice,
-					value: crypto.randomUUID(),
-					checked: false,
-				};
-			}),
-		];
+		newOptions.forEach((newOption) => {
+			if (!this.options.has(newOption)) {
+				this.options.set(
+					newOption,
+					crypto.randomUUID(),
+				);
+			}
+		});
 
-		const checkedChoices: string[] = await Checkbox.prompt<string>({
+		this.solution = await Checkbox.prompt<string>({
 			message: this.title ?? '',
-			options: this.choices,
-			default: this.choices.filter((choice) => choice.checked)
-				.map((choice) => choice.value),
+			options: Array.from(this.options).map((
+				[name, value],
+			) => ({ name, value })),
+			default: this.solution,
 		});
-
-		this.choices = this.choices.map((choice) => {
-			return {
-				...choice,
-				checked: checkedChoices.includes(choice.value),
-			};
-		});
-
-		console.log(this.choices);
 	}
 
 	get solutionText(): string {
