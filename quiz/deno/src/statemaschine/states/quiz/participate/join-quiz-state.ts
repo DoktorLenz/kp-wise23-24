@@ -1,10 +1,10 @@
 import { IState } from '@states/state.ts';
 import { Input } from '@cliffy/prompt/mod.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
-import { InitState } from '@states/init-state.ts';
 import { User } from '@src/user.ts';
 import { clearConsole } from '@src/utils.ts';
 import { keypress } from '@cliffy/keypress/mod.ts';
+import { RunQuizState } from '@states/quiz/participate/run-quiz-state.ts';
 
 export class JoinQuizState implements IState {
 	async run(): Promise<IState> {
@@ -40,6 +40,6 @@ export class JoinQuizState implements IState {
 		console.log('Press any key to start the quiz');
 		await keypress();
 
-		return new InitState();
+		return new RunQuizState(quiz);
 	}
 }
