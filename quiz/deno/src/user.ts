@@ -101,4 +101,10 @@ export class User {
 		const user = users.find((user) => user.username === username);
 		return !!user;
 	}
+
+	static async getUsernameById(id: string): Promise<string> {
+		const users = await this.getAllUsers();
+		const user = users.find((user) => user.id === id);
+		return user?.username ?? '';
+	}
 }

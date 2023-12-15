@@ -4,6 +4,7 @@ import { ExitState } from '@states/exit-state.ts';
 import { LoginState } from '@states/login-state.ts';
 import { RegisterState } from '@states/register-state.ts';
 import { IState } from '@states/state.ts';
+import { JoinQuizState } from '@states/quiz/participate/join-quiz-state.ts';
 
 export class InitState implements IState {
 	async run(): Promise<IState> {
@@ -34,7 +35,7 @@ export class InitState implements IState {
 			case Action.Register:
 				return new RegisterState();
 			case Action.Join:
-				return new InitState();
+				return new JoinQuizState();
 			case Action.Exit:
 				return new ExitState();
 		}

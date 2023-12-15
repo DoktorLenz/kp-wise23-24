@@ -149,4 +149,19 @@ export class Quiz {
 
 		return quiz;
 	}
+
+	public static async getQuizByShareCode(
+		shareCode: string,
+	): Promise<Quiz | undefined> {
+		const quizzes = await this.getAllQuizzes();
+		const quiz = quizzes.find((quiz) =>
+			quiz.shareCode === shareCode
+		);
+		return quiz;
+	}
+
+	public static async availableShareCodes(): Promise<string[]> {
+		const quizzes = await this.getAllQuizzes();
+		return quizzes.map((quiz) => quiz.shareCode);
+	}
 }
