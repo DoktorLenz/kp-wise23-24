@@ -59,6 +59,7 @@ export abstract class Question<T> {
 		this.description = await Input.prompt({
 			message: 'Please enter the description of the question',
 			default: this.description,
+			hideDefault: this.description === '',
 			maxLength: 100,
 		});
 	}

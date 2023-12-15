@@ -1,5 +1,5 @@
 import { Question } from '@src/quiz/question.ts';
-import { inherits, map, MapShape, model, property } from '@decoverto';
+import { array, inherits, map, MapShape, model, property } from '@decoverto';
 import { Checkbox, List } from '@cliffy/prompt/mod.ts';
 
 type Option = { name: string; value: string };
@@ -14,18 +14,18 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 	 *
 	 * value: id
 	 */
-	@property(map(() => String, () => String, { shape: MapShape.Array }))
-	options: Map<string, string>;
+	@property(array(() => String))
+	options?: string[];
 
 	protected constructor(
 		id: string,
 		title?: string,
 		description?: string,
 		solution?: string[],
-		options?: Map<string, string>,
+		options?: string[],
 	) {
 		super(id, title, description, solution);
-		this.options = options ?? new Map();
+		this.options = options;
 	}
 
 	static create(): MultipleChoiceQuestion {
@@ -51,39 +51,21 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 	override async edit(): Promise<void> {
 		await super.edit();
 
-		const newOptions: string[] = await List.prompt({
+		this.options = await List.prompt({
 			message: 'Please enter the choices separated by a comma',
 			minTags: 2,
-			default: Array.from(this.options.keys()),
-		});
-
-		const removedOptions = Array.from(this.options.values()).filter(
-			(option) => !newOptions.includes(option),
-		);
-
-		removedOptions.forEach((option) => {
-			this.options.delete(option);
-		});
-
-		newOptions.forEach((newOption) => {
-			if (!this.options.has(newOption)) {
-				this.options.set(
-					newOption,
-					crypto.randomUUID(),
-				);
-			}
+			default: this.options,
+			hideDefault: this.options?.length === 0,
 		});
 
 		this.solution = await Checkbox.prompt<string>({
 			message: this.title ?? '',
-			options: Array.from(this.options).map((
-				[name, value],
-			) => ({ name, value })),
+			options: this.options,
 			default: this.solution,
 		});
 	}
 
 	get solutionText(): string {
-		return '';
+		return this.solution?.join(', ') ?? '';
 	}
 }
