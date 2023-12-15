@@ -5,7 +5,7 @@ import { tty } from '@cliffy/ansi/tty.ts';
 import { RowType, Table, TableType } from '@cliffy/table/mod.ts';
 import { Cell } from '@cliffy/table/cell.ts';
 import { Row } from '@cliffy/table/row.ts';
-import { keypress, KeyPressEvent } from '@cliffy/keypress/mod.ts';
+import { keypress } from '@cliffy/keypress/mod.ts';
 import { LoggedInState } from '@states/logged-in/logged-in-state.ts';
 import { NewQuizState } from '@states/quiz/manage/new-quiz-state.ts';
 import { EditQuizState } from './edit-quiz-state.ts';
@@ -73,13 +73,14 @@ export class ManageQuizzesState implements IState {
 				quiz.name,
 				quiz.description,
 				quiz.questions.length.toString(),
+				quiz.shareCode,
 			]);
 		});
 
 		bodyContent.push([
 			new Cell(
 				'[+] Add Quiz \r\n [-] Delete Quiz \r\n [Enter] Edit Quiz \r\n [Esc] Back',
-			).colSpan(4).align('center').border(false),
+			).colSpan(5).align('center').border(false),
 		]);
 
 		new Table()
@@ -89,6 +90,7 @@ export class ManageQuizzesState implements IState {
 					'Quiz-Name',
 					'Description',
 					'Questioncount',
+					'Share-Code',
 				),
 			)
 			.body(bodyContent)

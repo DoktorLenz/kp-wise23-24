@@ -2,6 +2,7 @@ import { User } from '@src/user.ts';
 import { dataDir } from '@src/utils.ts';
 import { Question } from '@src/quiz/question.ts';
 import { array, Decoverto, model, property } from '@decoverto';
+import { crypto } from 'https://deno.land/std/crypto/mod.ts';
 
 @model()
 export class Quiz {
@@ -24,14 +25,19 @@ export class Quiz {
 	@property(array(() => Question))
 	questions: Question<unknown>[] = [];
 
+	@property()
+	shareCode: string;
+
 	private constructor(
 		id: string,
 		userId: string,
 		name: string,
+		shareCode?: string,
 	) {
 		this.id = id;
 		this.userId = userId;
 		this.name = name;
+		this.shareCode = shareCode ?? this.getSharedLink();
 	}
 
 	public async delete(): Promise<Quiz[]> {
@@ -64,6 +70,19 @@ export class Quiz {
 			quizzes[index] = this;
 		}
 		Quiz.saveAllQuizzes(quizzes);
+	}
+
+	private getSharedLink(): string {
+		const encoder = new TextEncoder();
+		const hashBuffer = crypto.subtle.digestSync(
+			'SHA-256',
+			encoder.encode(this.id),
+		);
+		const hashArray = Array.from(new Uint8Array(hashBuffer));
+		const hashHex = hashArray.map((b) =>
+			b.toString(16).padStart(2, '0')
+		).join('').substring(0, 8);
+		return parseInt(hashHex, 16).toString(36);
 	}
 
 	static isAnyQuizRegistered(user: User): Promise<boolean> {
