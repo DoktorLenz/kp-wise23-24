@@ -35,7 +35,11 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 	}
 
 	ask(): Promise<string[]> {
-		throw new Error('Method not implemented.');
+		this.printTitle();
+		return Checkbox.prompt<string>({
+			message: this.description ?? '',
+			options: this.options ?? [],
+		});
 	}
 
 	checkAnswer(answer: string[]): boolean {
