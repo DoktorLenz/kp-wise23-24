@@ -29,15 +29,15 @@ export class JoinQuizState implements IState {
 
 		UI.clear();
 
-		await UI.prompt(
+		UI.prompt(
 			`%cWelcome to '${quiz.name}' by '${username}`,
 			'color: #00f; font-weight: bold;',
 		);
 		if (quiz.description) {
-			await UI.prompt(quiz.description);
+			UI.prompt(quiz.description);
 		}
-		await UI.prompt();
-		await UI.prompt('Press any key to start the quiz');
+		UI.prompt();
+		UI.prompt('Press any key to start the quiz');
 		await keypress();
 
 		return new RunQuizState(quiz);

@@ -15,19 +15,20 @@ export class RunQuizState implements IState {
 		for (const question of questions) {
 			const answer = await question.ask();
 			if (question.checkAnswer(answer)) {
-				await UI.prompt(
+				UI.prompt(
 					'%cCorrect!',
 					'color: #0f0; font-weight: bold;',
 				);
 				answers.set(question.id, true);
 			} else {
-				await UI.prompt(
+				UI.prompt(
 					'%cWrong!',
 					'color: #f00; font-weight: bold;',
 				);
 				answers.set(question.id, false);
 			}
-			await UI.prompt('Press any key to continue...');
+			UI.prompt();
+			UI.prompt('Press any key to continue...');
 			await keypress();
 		}
 

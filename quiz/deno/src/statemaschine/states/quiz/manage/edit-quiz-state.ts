@@ -62,10 +62,10 @@ export class EditQuizState implements IState {
 				);
 			} else if (event.key === 'escape') {
 				UI.clear();
-				await UI.prompt('Saving quiz...');
+				UI.prompt('Saving quiz...');
 				await UI.pause(2);
 				UI.clear();
-				await UI.prompt('Quiz saved!');
+				UI.prompt('Quiz saved!');
 				await this.quiz.save();
 				await UI.pause(2);
 				break;

@@ -34,8 +34,8 @@ export class MultipleChoiceQuestion extends Question<string[]> {
 		);
 	}
 
-	ask(): Promise<string[]> {
-		this.printTitle();
+	override async ask(): Promise<string[]> {
+		await this.printTitle();
 		return Checkbox.prompt<string>({
 			message: this.description ?? '',
 			options: this.options ?? [],

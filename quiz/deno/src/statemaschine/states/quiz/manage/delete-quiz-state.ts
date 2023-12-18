@@ -29,10 +29,10 @@ export class DeleteQuizState implements IState {
 
 		if (quiz !== null) {
 			UI.clear();
-			await UI.prompt('Deleting quiz...');
+			UI.prompt('Deleting quiz...');
 			await UI.pause(2);
 			UI.clear();
-			await UI.prompt('Quiz deleted!');
+			UI.prompt('Quiz deleted!');
 			await quiz.delete();
 			await UI.pause(2);
 		}

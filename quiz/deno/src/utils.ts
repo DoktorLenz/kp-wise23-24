@@ -7,10 +7,16 @@ export class UI {
 	static prompt(
 		message?: string,
 		data?: string,
-		seconds?: number,
-	): Promise<unknown> {
-		console.log(message, data);
-		return this.pause(seconds ?? 0);
+	): void {
+		if (message) {
+			if (data) {
+				console.log(message, data);
+			} else {
+				console.log(message);
+			}
+		} else {
+			console.log();
+		}
 	}
 
 	static pause(seconds: number): Promise<unknown> {

@@ -16,8 +16,8 @@ export class LoginState implements IState {
 			UI.prompt(
 				'%cInvalid username or password',
 				'color: red',
-				2,
 			);
+			await UI.pause(2);
 			return new LoginState();
 		}
 	}

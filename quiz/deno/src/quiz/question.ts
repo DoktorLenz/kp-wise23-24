@@ -37,8 +37,8 @@ export abstract class Question<T> {
 		this.solution = solution;
 	}
 
-	protected printTitle(): Promise<unknown> {
-		return UI.prompt(
+	protected printTitle(): void {
+		UI.prompt(
 			`%c${this.title}`,
 			`color: #00f; font-weight: bold;`,
 		);

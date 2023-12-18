@@ -39,10 +39,10 @@ export class RegisterState implements IState {
 		});
 
 		UI.clear();
-		await UI.prompt('Creating user...');
+		UI.prompt('Creating user...');
 		await UI.pause(2);
 		UI.clear();
-		await UI.prompt('User created!');
+		UI.prompt('User created!');
 		User.create(username, password);
 		await UI.pause(2);
 

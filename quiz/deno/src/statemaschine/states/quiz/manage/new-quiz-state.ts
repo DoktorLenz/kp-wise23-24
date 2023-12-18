@@ -16,10 +16,10 @@ export class NewQuizState implements IState {
 		});
 
 		UI.clear();
-		await UI.prompt('Creating quiz...');
+		UI.prompt('Creating quiz...');
 		await UI.pause(2);
 		UI.clear();
-		await UI.prompt('Quiz created!');
+		UI.prompt('Quiz created!');
 		const quizId = await Quiz.create(this.user, quizName);
 		await UI.pause(2);
 

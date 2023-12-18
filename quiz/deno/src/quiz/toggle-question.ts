@@ -37,8 +37,8 @@ export class ToggleQuestion extends Question<boolean> {
 		return answer === this.solution;
 	}
 
-	override ask(): Promise<boolean> {
-		this.printTitle();
+	override async ask(): Promise<boolean> {
+		await this.printTitle();
 		return Toggle.prompt({
 			message: this.description ?? '',
 			active: this.trueText ?? 'Yes',
