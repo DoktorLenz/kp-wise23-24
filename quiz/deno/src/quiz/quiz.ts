@@ -85,6 +85,10 @@ export class Quiz {
 		this.responses.set(crypto.randomUUID(), answers);
 	}
 
+	public getResponsesCount(): number {
+		return this.responses.size;
+	}
+
 	public async save(): Promise<void> {
 		const quizzes = await Quiz.getAllQuizzes();
 		const index = quizzes.findIndex((quiz) => quiz.id === this.id);

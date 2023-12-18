@@ -74,13 +74,14 @@ export class ManageQuizzesState implements IState {
 				quiz.description,
 				quiz.questions.length.toString(),
 				quiz.shareCode,
+				quiz.getResponsesCount(),
 			]);
 		});
 
 		bodyContent.push([
 			new Cell(
 				'[+] Add Quiz \r\n [-] Delete Quiz \r\n [Enter] Edit Quiz \r\n [Esc] Back',
-			).colSpan(5).align('center').border(false),
+			).colSpan(6).align('center').border(false),
 		]);
 
 		new Table()
@@ -91,6 +92,7 @@ export class ManageQuizzesState implements IState {
 					'Description',
 					'Questioncount',
 					'Share-Code',
+					'Participations',
 				),
 			)
 			.body(bodyContent)
