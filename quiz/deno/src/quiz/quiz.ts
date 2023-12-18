@@ -1,7 +1,15 @@
 import { User } from '@src/user.ts';
 import { dataDir } from '@src/utils.ts';
 import { Question } from '@src/quiz/question.ts';
-import { array, Decoverto, model, property } from '@decoverto';
+import {
+	Any,
+	array,
+	Decoverto,
+	map,
+	MapShape,
+	model,
+	property,
+} from '@decoverto';
 import { crypto } from 'https://deno.land/std/crypto/mod.ts';
 
 @model()
@@ -28,16 +36,29 @@ export class Quiz {
 	@property()
 	shareCode: string;
 
+	@property(
+		map(
+			() => String,
+			map(() => String, () => Boolean, {
+				shape: MapShape.Object,
+			}),
+			{ shape: MapShape.Object },
+		),
+	)
+	private responses: Map<string, Map<string, boolean>>;
+
 	private constructor(
 		id: string,
 		userId: string,
 		name: string,
 		shareCode?: string,
+		responses?: Map<string, Map<string, boolean>>,
 	) {
 		this.id = id;
 		this.userId = userId;
 		this.name = name;
-		this.shareCode = shareCode ?? this.getSharedLink();
+		this.shareCode = shareCode ?? this.getShareCode();
+		this.responses = responses ?? new Map();
 	}
 
 	public async delete(): Promise<Quiz[]> {
@@ -60,6 +81,10 @@ export class Quiz {
 		);
 	}
 
+	public addResponse(answers: Map<string, boolean>): void {
+		this.responses.set(crypto.randomUUID(), answers);
+	}
+
 	public async save(): Promise<void> {
 		const quizzes = await Quiz.getAllQuizzes();
 		const index = quizzes.findIndex((quiz) => quiz.id === this.id);
@@ -72,7 +97,7 @@ export class Quiz {
 		Quiz.saveAllQuizzes(quizzes);
 	}
 
-	private getSharedLink(): string {
+	private getShareCode(): string {
 		const encoder = new TextEncoder();
 		const hashBuffer = crypto.subtle.digestSync(
 			'SHA-256',

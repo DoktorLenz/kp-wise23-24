@@ -9,6 +9,8 @@ export class RunQuizState implements IState {
 	async run() {
 		const questions = this.quiz.questions;
 
+		const answers = new Map<string, boolean>();
+
 		for (const question of questions) {
 			const answer = await question.ask();
 			if (question.checkAnswer(answer)) {
@@ -16,15 +18,20 @@ export class RunQuizState implements IState {
 					'%cCorrect!',
 					'color: #0f0; font-weight: bold;',
 				);
+				answers.set(question.id, true);
 			} else {
 				console.log(
 					'%cWrong!',
 					'color: #f00; font-weight: bold;',
 				);
+				answers.set(question.id, false);
 			}
 			console.log('Press any key to continue...');
 			await keypress();
 		}
+
+		this.quiz.addResponse(answers);
+		await this.quiz.save();
 
 		return new InitState();
 	}
