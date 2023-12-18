@@ -1,9 +1,8 @@
 import { IState } from '@states/state.ts';
 import { Select, SelectOption } from '@cliffy/prompt/mod.ts';
-import { sleep } from '@sleep';
 import { Quiz } from '@src/quiz/quiz.ts';
 import { User } from '@src/user.ts';
-import { clearConsole } from '@src/utils.ts';
+import { UI } from '@src/utils.ts';
 import { ManageQuizzesState } from '@states/quiz/manage/manage-quizzes-state.ts';
 
 export class DeleteQuizState implements IState {
@@ -29,13 +28,13 @@ export class DeleteQuizState implements IState {
 		});
 
 		if (quiz !== null) {
-			clearConsole();
-			console.log('Deleting quiz...');
-			await sleep(2);
-			clearConsole();
-			console.log('Quiz deleted!');
+			UI.clear();
+			await UI.prompt('Deleting quiz...');
+			await UI.pause(2);
+			UI.clear();
+			await UI.prompt('Quiz deleted!');
 			await quiz.delete();
-			await sleep(2);
+			await UI.pause(2);
 		}
 
 		return new ManageQuizzesState(this.user);

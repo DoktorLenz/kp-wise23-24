@@ -3,7 +3,7 @@ import { Input, Secret } from '@cliffy/prompt/mod.ts';
 import { User } from '@src/user.ts';
 import { IState } from '@states/state.ts';
 import { InitState } from '@states/init-state.ts';
-import { clearConsole } from '@src/utils.ts';
+import { UI } from '@src/utils.ts';
 
 export class RegisterState implements IState {
 	async run(): Promise<IState> {
@@ -38,13 +38,13 @@ export class RegisterState implements IState {
 					: 'Passwords do not match',
 		});
 
-		clearConsole();
-		console.log('Creating user...');
-		await sleep(2);
-		clearConsole();
-		console.log('User created!');
+		UI.clear();
+		await UI.prompt('Creating user...');
+		await UI.pause(2);
+		UI.clear();
+		await UI.prompt('User created!');
 		User.create(username, password);
-		await sleep(2);
+		await UI.pause(2);
 
 		return new InitState();
 	}

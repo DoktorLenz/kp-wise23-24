@@ -2,9 +2,9 @@ import { IState } from '@states/state.ts';
 import { Input } from '@cliffy/prompt/mod.ts';
 import { Quiz } from '@src/quiz/quiz.ts';
 import { User } from '@src/user.ts';
-import { clearConsole } from '@src/utils.ts';
 import { keypress } from '@cliffy/keypress/mod.ts';
 import { RunQuizState } from '@states/quiz/participate/run-quiz-state.ts';
+import { UI } from '@src/utils.ts';
 
 export class JoinQuizState implements IState {
 	async run(): Promise<IState> {
@@ -27,17 +27,17 @@ export class JoinQuizState implements IState {
 			throw new Error('Invalid quiz or user');
 		}
 
-		clearConsole();
+		UI.clear();
 
-		console.log(
+		await UI.prompt(
 			`%cWelcome to '${quiz.name}' by '${username}`,
 			'color: #00f; font-weight: bold;',
 		);
 		if (quiz.description) {
-			console.log(quiz.description);
+			await UI.prompt(quiz.description);
 		}
-		console.log();
-		console.log('Press any key to start the quiz');
+		await UI.prompt();
+		await UI.prompt('Press any key to start the quiz');
 		await keypress();
 
 		return new RunQuizState(quiz);

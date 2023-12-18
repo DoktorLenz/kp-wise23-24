@@ -4,13 +4,12 @@ import { ManageQuizzesState } from '@states/quiz/manage/manage-quizzes-state.ts'
 import { Quiz } from '@src/quiz/quiz.ts';
 import { Cell, Table, TableType } from '@cliffy/table/mod.ts';
 import { Row, RowType } from '@cliffy/table/row.ts';
-import { keypress, KeyPressEvent } from '@cliffy/keypress/mod.ts';
+import { keypress } from '@cliffy/keypress/mod.ts';
 import { bold } from '@cliffy/prompt/deps.ts';
 import { tty } from '@cliffy/ansi/tty.ts';
 import { AddQuestionState } from '@states/quiz/manage/question/add-question-state.ts';
 import { EditQuestionState } from '@states/quiz/manage/question/edit-question-state.ts';
-import { clearConsole } from '@src/utils.ts';
-import { sleep } from '@sleep';
+import { UI } from '@src/utils.ts';
 
 export class EditQuizState implements IState {
 	constructor(
@@ -62,13 +61,13 @@ export class EditQuizState implements IState {
 					this.quiz.questions[carretIndex],
 				);
 			} else if (event.key === 'escape') {
-				clearConsole();
-				console.log('Saving quiz...');
-				await sleep(2);
-				clearConsole();
-				console.log('Quiz saved!');
+				UI.clear();
+				await UI.prompt('Saving quiz...');
+				await UI.pause(2);
+				UI.clear();
+				await UI.prompt('Quiz saved!');
 				await this.quiz.save();
-				await sleep(2);
+				await UI.pause(2);
 				break;
 			} else if (event.ctrlKey && event.key === 'c') {
 				Deno.exit(0);

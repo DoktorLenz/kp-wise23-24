@@ -1,19 +1,24 @@
 import { Input, Secret } from '@cliffy/prompt/mod.ts';
 import { User } from '@src/user.ts';
-import { InitState } from '@states/init-state.ts';
 import { LoggedInState } from '@states/logged-in/logged-in-state.ts';
 import { IState } from '@states/state.ts';
+import { UI } from '@src/utils.ts';
 
 export class LoginState implements IState {
 	async run(): Promise<IState> {
 		const username = await Input.prompt('Username: ');
 		const password = await Secret.prompt('Password: ');
 
-		const user = await User.checkLogin(username, password);
-		if (user) {
+		try {
+			const user = await User.checkLogin(username, password);
 			return new LoggedInState(user);
+		} catch {
+			UI.prompt(
+				'%cInvalid username or password',
+				'color: red',
+				2,
+			);
+			return new LoginState();
 		}
-
-		return new InitState();
 	}
 }

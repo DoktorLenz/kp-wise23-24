@@ -1,8 +1,7 @@
 import { Input } from '@cliffy/prompt/input.ts';
-import { sleep } from '@sleep';
 import { Quiz } from '@src/quiz/quiz.ts';
 import { User } from '@src/user.ts';
-import { clearConsole } from '@src/utils.ts';
+import { UI } from '@src/utils.ts';
 import { IState } from '@states/state.ts';
 import { EditQuizState } from './edit-quiz-state.ts';
 
@@ -16,13 +15,13 @@ export class NewQuizState implements IState {
 			maxLength: 100,
 		});
 
-		clearConsole();
-		console.log('Creating quiz...');
-		await sleep(2);
-		clearConsole();
-		console.log('Quiz created!');
+		UI.clear();
+		await UI.prompt('Creating quiz...');
+		await UI.pause(2);
+		UI.clear();
+		await UI.prompt('Quiz created!');
 		const quizId = await Quiz.create(this.user, quizName);
-		await sleep(2);
+		await UI.pause(2);
 
 		return new EditQuizState(this.user, quizId);
 	}

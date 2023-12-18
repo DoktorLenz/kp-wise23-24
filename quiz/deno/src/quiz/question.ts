@@ -1,6 +1,6 @@
 import { Any, model, property } from '@decoverto';
 import { Input } from '@cliffy/prompt/mod.ts';
-import { clearConsole } from '@src/utils.ts';
+import { UI } from '@src/utils.ts';
 
 @model({
 	inheritance: {
@@ -37,8 +37,8 @@ export abstract class Question<T> {
 		this.solution = solution;
 	}
 
-	protected printTitle(): void {
-		console.log(
+	protected printTitle(): Promise<unknown> {
+		return UI.prompt(
 			`%c${this.title}`,
 			`color: #00f; font-weight: bold;`,
 		);
@@ -48,7 +48,7 @@ export abstract class Question<T> {
 	abstract ask(): Promise<T>;
 
 	async edit(): Promise<void> {
-		clearConsole();
+		UI.clear();
 		this.title = await Input.prompt({
 			message: 'Please enter the title of the question',
 			default: this.title,
