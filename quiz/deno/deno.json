@@ -3,7 +3,7 @@
         "exec": "deno run --allow-write --allow-read --allow-env src/main.ts",
         "debug": "deno run --inspect-brk --allow-write --allow-read src/main.ts",
         "test": "deno test --allow-all",
-        "test-coverage": "deno test --allow-all --coverage && deno coverage --html coverage"
+        "test-coverage": "rm -rf coverage && deno test --allow-all --coverage && deno coverage --html coverage"
     },
     "lint": {
         "include": [

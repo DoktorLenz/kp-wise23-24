@@ -1,5 +1,4 @@
 import { User } from '@src/user.ts';
-import { dataDir } from '@src/utils.ts';
 import { Question } from '@src/quiz/question.ts';
 import {
 	Any,
@@ -11,6 +10,7 @@ import {
 	property,
 } from '@decoverto';
 import { crypto } from 'https://deno.land/std/crypto/mod.ts';
+import { FS } from '@src/utils.ts';
 
 @model()
 export class Quiz {
@@ -125,13 +125,10 @@ export class Quiz {
 		const decoverto = new Decoverto();
 
 		const raw = decoverto.type(Quiz).instanceArrayToRaw(quizzes);
-		await Deno.mkdir(dataDir, { recursive: true });
 
-		await Deno.writeFile(
-			`${dataDir}/quizzes.json`,
-			encoder.encode(raw),
-			{ create: true },
-		);
+		await FS.writeFile('quizzes.json', encoder.encode(raw), {
+			create: true,
+		});
 	}
 
 	private static async getAllQuizzes(): Promise<Quiz[]> {
@@ -139,9 +136,7 @@ export class Quiz {
 		const decoverto = new Decoverto();
 
 		try {
-			const content = await Deno.readFile(
-				`${dataDir}/quizzes.json`,
-			);
+			const content = await FS.readFile('quizzes.json');
 			const quizzes = decoverto.type(Quiz).rawToInstanceArray(
 				decoder.decode(content),
 			);

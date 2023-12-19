@@ -1,16 +1,16 @@
 import * as bcrypt from '@bcrypt';
-import { dataDir } from '@src/utils.ts';
 import { Decoverto, model, property } from '@decoverto';
+import { FS } from '@src/utils.ts';
 
 @model()
 export class User {
-	@property()
+	@property(() => String)
 	id: string;
 
-	@property()
+	@property(() => String)
 	username: string;
 
-	@property()
+	@property(() => String)
 	password: string;
 
 	private constructor(
@@ -24,10 +24,7 @@ export class User {
 	}
 
 	public isPasswordValid(password: string): boolean {
-		if (this.password) {
-			return bcrypt.compareSync(password, this.password);
-		}
-		return false;
+		return bcrypt.compareSync(password, this.password);
 	}
 
 	static async create(username: string, password: string): Promise<User> {
@@ -53,10 +50,9 @@ export class User {
 		const decoverto = new Decoverto();
 
 		const raw = decoverto.type(User).instanceArrayToRaw(users);
-		await Deno.mkdir(dataDir, { recursive: true });
 
-		await Deno.writeFile(
-			`${dataDir}/users.json`,
+		await FS.writeFile(
+			'users.json',
 			encoder.encode(raw),
 			{ create: true },
 		);
@@ -67,8 +63,8 @@ export class User {
 		const decoverto = new Decoverto();
 
 		try {
-			const raw = await Deno.readFile(
-				`${dataDir}/users.json`,
+			const raw = await FS.readFile(
+				'users.json',
 			);
 
 			return decoverto.type(User).rawToInstanceArray(
