@@ -5,9 +5,17 @@ import { Input, Toggle } from '@cliffy/prompt/mod.ts';
 @inherits({ discriminator: 'ToggleQuestion' })
 @model()
 export class ToggleQuestion extends Question<boolean> {
-	@property()
+	@property({
+		toInstance: (value: string | undefined) => value,
+		toPlain: (value: string | undefined) =>
+			value === '' ? undefined : value,
+	})
 	trueText?: string;
-	@property()
+	@property({
+		toInstance: (value: string | undefined) => value,
+		toPlain: (value: string | undefined) =>
+			value === '' ? undefined : value,
+	})
 	falseText?: string;
 
 	get solutionText(): string {

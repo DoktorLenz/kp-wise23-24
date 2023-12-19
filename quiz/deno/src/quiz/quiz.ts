@@ -1,26 +1,18 @@
 import { User } from '@src/user.ts';
 import { Question } from '@src/quiz/question.ts';
-import {
-	Any,
-	array,
-	Decoverto,
-	map,
-	MapShape,
-	model,
-	property,
-} from '@decoverto';
+import { array, Decoverto, map, MapShape, model, property } from '@decoverto';
 import { crypto } from 'https://deno.land/std/crypto/mod.ts';
 import { FS } from '@src/utils.ts';
 
 @model()
 export class Quiz {
-	@property()
+	@property(() => String)
 	id: string;
 
-	@property()
+	@property(() => String)
 	userId: string;
 
-	@property()
+	@property(() => String)
 	name: string;
 
 	@property({
@@ -33,7 +25,7 @@ export class Quiz {
 	@property(array(() => Question))
 	questions: Question<unknown>[] = [];
 
-	@property()
+	@property(() => String)
 	shareCode: string;
 
 	@property(

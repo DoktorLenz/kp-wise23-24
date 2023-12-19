@@ -1,4 +1,3 @@
-import { sleep } from '@sleep';
 import { Input, Secret } from '@cliffy/prompt/mod.ts';
 import { User } from '@src/user.ts';
 import { IState } from '@states/state.ts';
@@ -43,7 +42,7 @@ export class RegisterState implements IState {
 		await UI.pause(2);
 		UI.clear();
 		UI.prompt('User created!');
-		User.create(username, password);
+		await User.create(username, password);
 		await UI.pause(2);
 
 		return new InitState();

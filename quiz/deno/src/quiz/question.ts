@@ -9,10 +9,14 @@ import { UI } from '@src/utils.ts';
 	},
 })
 export abstract class Question<T> {
-	@property()
+	@property(() => String)
 	id: string;
 
-	@property()
+	@property({
+		toInstance: (value: string | undefined) => value,
+		toPlain: (value: string | undefined) =>
+			value === '' ? undefined : value,
+	})
 	title?: string;
 
 	@property({
