@@ -19,6 +19,7 @@ import sinon from 'npm:sinon@17.0.1';
 
 import { RegisterState } from '@states/register-state.ts';
 import { ExitState } from '@states/exit-state.ts';
+import { JoinQuizState } from '@states/quiz/participate/join-quiz-state.ts';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -64,7 +65,7 @@ describe('InitState', () => {
 		const initState = new InitState();
 		const nextState = await initState.run();
 
-		expect(nextState).to.be.instanceOf(InitState);
+		expect(nextState).to.be.instanceOf(JoinQuizState);
 	});
 
 	it('should return ExitState when action is "exit"', async () => {
