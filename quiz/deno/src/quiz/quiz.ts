@@ -138,9 +138,12 @@ export class Quiz {
 		}
 	}
 
-	public static async create(user: User, name: string): Promise<Quiz> {
+	public static async create(
+		userId: string,
+		name: string,
+	): Promise<Quiz> {
 		const quizzes = await this.getAllQuizzes();
-		const quiz = new Quiz(crypto.randomUUID(), user.id, name);
+		const quiz = new Quiz(crypto.randomUUID(), userId, name);
 
 		quizzes.push(quiz);
 		this.saveAllQuizzes(quizzes);

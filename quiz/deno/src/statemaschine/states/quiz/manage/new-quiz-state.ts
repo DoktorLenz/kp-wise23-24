@@ -20,7 +20,7 @@ export class NewQuizState implements IState {
 		await UI.pause(2);
 		UI.clear();
 		UI.prompt('Quiz created!');
-		const quizId = await Quiz.create(this.user, quizName);
+		const quizId = await Quiz.create(this.user.id, quizName);
 		await UI.pause(2);
 
 		return new EditQuizState(this.user, quizId);
