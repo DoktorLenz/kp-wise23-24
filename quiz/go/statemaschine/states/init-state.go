@@ -4,15 +4,6 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type Action int
-
-const (
-	Login Action = iota
-	Register
-	Join
-	Exit
-)
-
 type InitState struct{}
 
 func (i *InitState) Run() IState {
@@ -30,7 +21,15 @@ func (i *InitState) Run() IState {
 	_, result, _ := prompt.Run()
 
 	switch result {
+	case "Login":
+		return &InitState{}
+	case "Register":
+		return &InitState{}
+	case "Join":
+		return &InitState{}
+	case "Exit":
+		return &ExitState{}
+	default:
+		return &InitState{}
 	}
-
-	return i
 }
