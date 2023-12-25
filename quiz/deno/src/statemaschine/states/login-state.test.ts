@@ -25,6 +25,8 @@ describe('LoginState', () => {
 	beforeEach(() => {
 		sandbox = sinon.createSandbox();
 		sandbox.stub(UI, 'prompt');
+		sandbox.stub(UI, 'clear');
+		sandbox.stub(UI, 'pause');
 
 		sandbox.stub(Deno, 'readFile').resolves(
 			new Uint8Array(),
