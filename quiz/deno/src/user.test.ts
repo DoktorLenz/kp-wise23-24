@@ -12,7 +12,7 @@ import chai from 'npm:chai@4.3.10';
 
 // @deno-types="npm:@types/sinon@17.0.2"
 import sinon from 'npm:sinon@17.0.1';
-import { Decoverto, TypeHandler } from '@decoverto';
+import { TypeHandler } from '@decoverto';
 import { FS } from '@src/utils.ts';
 
 const expect = chai.expect;

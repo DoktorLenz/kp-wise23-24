@@ -1,5 +1,5 @@
 import { Question } from '@src/quiz/question.ts';
-import { array, inherits, map, MapShape, model, property } from '@decoverto';
+import { array, inherits, model, property } from '@decoverto';
 import { Checkbox, List } from '@cliffy/prompt/mod.ts';
 
 type Option = { name: string; value: string };
