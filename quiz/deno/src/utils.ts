@@ -32,7 +32,7 @@ export class FS {
 	private static mkdir(
 		options?: Deno.MkdirOptions,
 	): Promise<void> {
-		return Deno.mkdir(`this.dataDir`, options);
+		return Deno.mkdir(`${this.dataDir}`, options);
 	}
 
 	static writeFile(
