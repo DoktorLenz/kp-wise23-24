@@ -29,7 +29,7 @@ func (i *InitState) Run() IState {
 	case "Login":
 		return &InitState{}
 	case "Register":
-		return &InitState{}
+		return &RegisterState{}
 	case "Join":
 		return &InitState{}
 	case "Exit":
