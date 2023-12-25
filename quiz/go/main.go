@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/DoktorLenz/kp-wise23-24/quiz/go/statemachine"
+	"github.com/DoktorLenz/kp-wise23-24/quiz/go/statemaschine"
 )
 
 func main() {
-	sm := statemachine.NewStateMachine()
+	sm := statemaschine.NewStateMachine()
 	sm.Start()
 }
