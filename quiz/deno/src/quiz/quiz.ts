@@ -37,7 +37,7 @@ export class Quiz {
 			{ shape: MapShape.Object },
 		),
 	)
-	private responses: Map<string, Map<string, boolean>>;
+	responses: Map<string, Map<string, boolean>>;
 
 	private constructor(
 		id: string,
@@ -84,7 +84,6 @@ export class Quiz {
 	public async save(): Promise<void> {
 		const quizzes = await Quiz.getAllQuizzes();
 		const index = quizzes.findIndex((quiz) => quiz.id === this.id);
-
 		if (index === -1) {
 			quizzes.push(this);
 		} else {
@@ -115,7 +114,6 @@ export class Quiz {
 	private static async saveAllQuizzes(quizzes: Quiz[]): Promise<void> {
 		const encoder = new TextEncoder();
 		const decoverto = new Decoverto();
-
 		const raw = decoverto.type(Quiz).instanceArrayToRaw(quizzes);
 
 		await FS.writeFile('quizzes.json', encoder.encode(raw), {
@@ -154,19 +152,6 @@ export class Quiz {
 		return (await this.getAllQuizzes()).filter((quiz) =>
 			quiz.userId === user.id
 		);
-	}
-
-	public static async getQuizById(user: User, id: string): Promise<Quiz> {
-		const quizzes = await this.getAllQuizzes();
-		const quiz = quizzes.find((quiz) =>
-			quiz.id === id && quiz.userId === user.id
-		);
-
-		if (!quiz) {
-			throw new Error(`Acces Violation`);
-		}
-
-		return quiz;
 	}
 
 	public static async getQuizByShareCode(
