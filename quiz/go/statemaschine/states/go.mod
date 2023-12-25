@@ -1,5 +1,3 @@
-module github.com/DoktorLenz/kp-wise23-24/quiz/states
+module github.com/DoktorLenz/kp-wise23-24/go/quiz/statemaschine/states
 
 go 1.21.3
-
-require github.com/manifoldco/promptui v0.9.0

@@ -1,7 +1,7 @@
 package statemaschine
 
 import (
-	"github.com/DoktorLenz/kp-wise23-24/quiz/states"
+	"states"
 )
 
 type StateMaschine struct {
