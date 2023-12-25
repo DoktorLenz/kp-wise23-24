@@ -83,6 +83,9 @@ func GetAllUsers() ([]*User, error) {
 	if err != nil {
 		fileContent = []byte("[]")
 	}
+	if (len(fileContent)) == 0 {
+		fileContent = []byte("[]")
+	}
 	err = json.Unmarshal(fileContent, &data)
 	if err != nil {
 		return nil, err
@@ -131,4 +134,13 @@ func IsUsernameTaken(username string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func IsAnyUserRegistered() (bool, error) {
+	users, err := GetAllUsers()
+	if err != nil {
+		return false, err
+	}
+
+	return len(users) > 0, nil
 }
