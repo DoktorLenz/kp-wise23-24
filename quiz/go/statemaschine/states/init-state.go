@@ -1,6 +1,7 @@
 package states
 
 import (
+	"github.com/DoktorLenz/kp-wise23-24/quiz/go/user"
 	"github.com/manifoldco/promptui"
 )
 
@@ -8,7 +9,11 @@ type InitState struct{}
 
 func (i *InitState) Run() IState {
 	var options []string
-	if true {
+	loginAvailable, err := user.IsAnyUserRegistered()
+	if err != nil {
+		panic(err)
+	}
+	if loginAvailable {
 		options = append(options, "Login")
 	}
 	options = append(options, "Register", "Join Quiz", "Exit")
