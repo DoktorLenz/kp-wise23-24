@@ -5,9 +5,7 @@ import (
 	"time"
 )
 
-type UI struct{}
-
-func (UI) Prompt(message string, data string) {
+func Prompt(message string, data string) {
 	if message != "" {
 		if data != "" {
 			fmt.Println(message, data)
@@ -19,10 +17,10 @@ func (UI) Prompt(message string, data string) {
 	}
 }
 
-func (UI) Pause(seconds time.Duration) {
+func Pause(seconds time.Duration) {
 	time.Sleep(seconds * time.Second)
 }
 
-func (UI) Clear() {
+func Clear() {
 	fmt.Println("\033[H\033[2J")
 }
