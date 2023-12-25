@@ -1,1 +1,7 @@
 go 1.21.3
+
+use (
+	./quiz/go
+	./quiz/go/statemaschine
+	./quiz/go/statemaschine/states
+)
