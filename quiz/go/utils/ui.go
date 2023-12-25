@@ -5,10 +5,10 @@ import (
 	"time"
 )
 
-func Prompt(message string, data any) {
+func Prompt(message string, data ...any) {
 	if message != "" {
-		if data != "" {
-			fmt.Printf(message, data)
+		if data != nil {
+			fmt.Printf(message, data...)
 			fmt.Printf("\n")
 		} else {
 			fmt.Println(message)
