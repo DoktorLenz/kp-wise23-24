@@ -8,8 +8,16 @@ import (
 
 var dataDir, _ = os.UserConfigDir()
 
+func GetDataDir() string {
+	baseDir, err := os.UserConfigDir()
+	if err != nil {
+		panic(err)
+	}
+	return filepath.Join(baseDir, "quiz")
+}
+
 func WriteFile(fileName string, data []byte) error {
-	filePath := filepath.Join(dataDir, "quiz", "go", fileName)
+	filePath := filepath.Join(GetDataDir(), fileName)
 	dir := filepath.Dir(filePath)
 
 	if err := os.MkdirAll(dir, 0755); err != nil {
@@ -21,7 +29,7 @@ func WriteFile(fileName string, data []byte) error {
 }
 
 func ReadFile(fileName string) ([]byte, error) {
-	filePath := filepath.Join(dataDir, "quiz", "go", fileName)
+	filePath := filepath.Join(GetDataDir(), fileName)
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
