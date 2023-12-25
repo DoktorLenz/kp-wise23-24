@@ -121,7 +121,7 @@ describe('Quiz', () => {
 	});
 
 	describe('save', () => {
-		it('should save the quiz and update the list of quizzes', async () => {
+		it('should add the new quiz and update the list of quizzes', async () => {
 			const userId = '67dab95b-b90f-4fad-a33a-ed47fc14b68f';
 			const quizName = 'Test Quiz';
 			const quiz = await Quiz.create(userId, quizName);
@@ -130,6 +130,24 @@ describe('Quiz', () => {
 				Quiz,
 				<any> 'getAllQuizzes',
 			).resolves([]);
+
+			await quiz.save();
+
+			expect(getAllQuizzesStub.calledOnce).to.be.true;
+			expect(quizTypeHandlerStub.alwaysCalledWith([quiz])).to
+				.be
+				.true;
+		});
+
+		it('should update the quiz and update the list of quizzes', async () => {
+			const userId = '67dab95b-b90f-4fad-a33a-ed47fc14b68f';
+			const quiz = await Quiz.create(userId, 'Test Quiz');
+			quiz.name = 'Test Quiz 2';
+
+			const getAllQuizzesStub = sandbox.stub(
+				Quiz,
+				<any> 'getAllQuizzes',
+			).resolves([quiz]);
 
 			await quiz.save();
 
@@ -211,6 +229,72 @@ describe('Quiz', () => {
 				quiz1.shareCode,
 				quiz2.shareCode,
 			]);
+			expect(getAllQuizzesStub.calledOnce).to.be.true;
+		});
+	});
+
+	describe('getAllQuizzesForUser', () => {
+		it('should return an array of quizzes for the given user', async () => {
+			const userId1 = '67dab95b-b90f-4fad-a33a-ed47fc14b68f';
+			const userId2 = '67dab95b-b90f-4fad-a33a-ed47fc14b68g';
+			const quizName = 'Test Quiz';
+			const quiz1 = await Quiz.create(
+				userId1,
+				quizName,
+			);
+			const quiz2 = await Quiz.create(
+				userId2,
+				quizName,
+			);
+
+			const getAllQuizzesStub = sandbox.stub(
+				Quiz,
+				<any> 'getAllQuizzes',
+			).resolves([quiz1, quiz2]);
+
+			const result = await Quiz.getAllQuizzesForUser({
+				id: userId1,
+			} as any);
+
+			expect(result).to.deep.equal([quiz1]);
+			expect(getAllQuizzesStub.calledOnce).to.be.true;
+		});
+	});
+
+	describe('isAnyQuizRegistered', () => {
+		it('should return true if the user has any quizzes registered', async () => {
+			const userId = '67dab95b-b90f-4fad-a33a-ed47fc14b68f';
+
+			const getAllQuizzesStub = sandbox.stub(
+				Quiz,
+				<any> 'getAllQuizzes',
+			).resolves([{
+				userId,
+			}]);
+
+			const result = await Quiz.isAnyQuizRegistered({
+				id: userId,
+			} as any);
+
+			expect(result).to.be.true;
+			expect(getAllQuizzesStub.calledOnce).to.be.true;
+		});
+
+		it('should return false if the user has no quizzes registered', async () => {
+			const userId = '67dab95b-b90f-4fad-a33a-ed47fc14b68f';
+
+			const getAllQuizzesStub = sandbox.stub(
+				Quiz,
+				<any> 'getAllQuizzes',
+			).resolves([{
+				userId: '67dab95b-b90f-4fad-a33a-ed47fc14b68g',
+			}]);
+
+			const result = await Quiz.isAnyQuizRegistered({
+				id: userId,
+			} as any);
+
+			expect(result).to.be.false;
 			expect(getAllQuizzesStub.calledOnce).to.be.true;
 		});
 	});
