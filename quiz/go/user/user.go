@@ -49,21 +49,6 @@ func CreateUser(username string, password string) (IUser, error) {
 	return user, nil
 }
 
-func CheckLogin(username string, password string) (IUser, error) {
-	users, err := GetAllUsers()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, user := range users {
-		if user.Username == username && user.CheckPassword(password) {
-			return user, nil
-		}
-	}
-
-	return nil, nil
-}
-
 func (u *User) GetID() string {
 	return u.ID
 }
@@ -116,4 +101,34 @@ func SaveAllUsers(users []*User) error {
 		return err
 	}
 	return nil
+}
+
+func CheckLogin(username string, password string) (IUser, error) {
+	users, err := GetAllUsers()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, user := range users {
+		if user.Username == username && user.CheckPassword(password) {
+			return user, nil
+		}
+	}
+
+	return nil, nil
+}
+
+func IsUsernameTaken(username string) (bool, error) {
+	users, err := GetAllUsers()
+	if err != nil {
+		return false, err
+	}
+
+	for _, user := range users {
+		if user.Username == username {
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
