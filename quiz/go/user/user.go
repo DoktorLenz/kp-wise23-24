@@ -80,10 +80,7 @@ func GetAllUsers() ([]*User, error) {
 
 	var data []*User
 	fileContent, err := utils.ReadFile("users.json")
-	if err != nil {
-		fileContent = []byte("[]")
-	}
-	if (len(fileContent)) == 0 {
+	if err != nil || len(fileContent) == 0 {
 		fileContent = []byte("[]")
 	}
 	err = json.Unmarshal(fileContent, &data)
@@ -98,12 +95,7 @@ func SaveAllUsers(users []*User) error {
 	if err != nil {
 		return err
 	}
-	utils.Prompt(string(b), nil)
-	err = utils.WriteFile("users.json", b)
-	if err != nil {
-		return err
-	}
-	return nil
+	return utils.WriteFile("users.json", b)
 }
 
 func CheckLogin(username string, password string) (IUser, error) {
