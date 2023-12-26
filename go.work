@@ -4,6 +4,7 @@ use (
 	./quiz/go
 	./quiz/go/utils
 	./quiz/go/user
+	./quiz/go/quiz
 	./quiz/go/statemaschine
 	./quiz/go/statemaschine/states
 )
