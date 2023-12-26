@@ -11,9 +11,9 @@ import (
 type RegisterState struct{}
 
 func (state *RegisterState) Run() IState {
-	username := promptUsername()
-	password := promptPassword()
-	promptConfirmPassword(password)
+	username := state.promptUsername()
+	password := state.promptPassword()
+	state.promptConfirmPassword(password)
 
 	utils.Clear()
 	utils.Prompt("Creating user...")
@@ -26,7 +26,7 @@ func (state *RegisterState) Run() IState {
 	return &InitState{}
 }
 
-func promptUsername() string {
+func (state *RegisterState) promptUsername() string {
 	prompt := promptui.Prompt{
 		Label: "Username",
 		Validate: func(input string) error {
@@ -44,7 +44,7 @@ func promptUsername() string {
 	return result
 }
 
-func promptPassword() string {
+func (state *RegisterState) promptPassword() string {
 	prompt := promptui.Prompt{
 		Label: "Password",
 		Mask:  '*',
@@ -59,7 +59,7 @@ func promptPassword() string {
 	return result
 }
 
-func promptConfirmPassword(password string) string {
+func (state *RegisterState) promptConfirmPassword(password string) string {
 	prompt := promptui.Prompt{
 		Label: "Confirm Password",
 		Mask:  '*',
