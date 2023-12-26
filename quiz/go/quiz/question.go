@@ -14,12 +14,9 @@ type Question struct {
 	Solution    interface{} `json:"solution"`
 }
 
-type CheckAnswerFunc func(answer interface{}) bool
-type AskFunc func() (interface{}, error)
-
 type IQuestion interface {
-	CheckAnswer(CheckAnswerFunc) bool
-	Ask(AskFunc) (interface{}, error)
+	CheckAnswer() bool
+	Ask() (interface{}, error)
 	Edit() error
 	GetSolutionText() string
 }
