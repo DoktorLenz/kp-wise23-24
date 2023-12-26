@@ -27,7 +27,7 @@ func (i *InitState) Run() IState {
 
 	switch result {
 	case "Login":
-		return &InitState{}
+		return &LoginState{}
 	case "Register":
 		return &RegisterState{}
 	case "Join":
