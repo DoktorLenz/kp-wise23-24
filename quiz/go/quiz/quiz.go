@@ -117,12 +117,12 @@ func GetAllQuizzes() ([]*Quiz, error) {
 			questionMap := question.(map[string]interface{})
 			switch questionMap["__type"].(string) {
 			case "ToggleQuestion":
-				var tq ToggleQuestion
+				var tq *ToggleQuestion = &ToggleQuestion{}
 				questionData, err := json.Marshal(question)
 				if err != nil {
 					return nil, err
 				}
-				err = json.Unmarshal(questionData, &tq)
+				err = json.Unmarshal(questionData, tq)
 				if err != nil {
 					return nil, err
 				}
