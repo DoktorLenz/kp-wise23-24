@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/utils"
+	"github.com/google/uuid"
 )
 
 type Quiz struct {
@@ -40,6 +41,27 @@ func (quiz *Quiz) Delete() ([]*Quiz, error) {
 
 	return quizzes, err
 
+}
+
+func Create(userId string, name string) (*Quiz, error) {
+	quizzes, err := GetAllQuizzes()
+	if err != nil {
+		return nil, err
+	}
+
+	quiz := &Quiz{
+		ID:        uuid.New().String(),
+		UserID:    userId,
+		Name:      name,
+		Questions: make([]interface{}, 0),
+		Responses: make(map[string]map[string]bool),
+	}
+
+	quizzes = append(quizzes, quiz)
+
+	err = SaveAllQuizzes(quizzes)
+
+	return quiz, err
 }
 
 func GetAllQuizzesForUser(userID string) ([]*Quiz, error) {
