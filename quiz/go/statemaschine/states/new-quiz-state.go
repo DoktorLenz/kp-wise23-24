@@ -1,9 +1,12 @@
 package states
 
 import (
+	"errors"
+
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/quiz"
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/user"
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/utils"
+	"github.com/manifoldco/promptui"
 )
 
 type NewQuizState struct {
@@ -11,7 +14,7 @@ type NewQuizState struct {
 }
 
 func (state *NewQuizState) Run() IState {
-	quizName := ""
+	quizName := state.promptQuizName()
 
 	utils.Clear()
 	utils.Prompt("Creating quiz...")
@@ -27,4 +30,21 @@ func (state *NewQuizState) Run() IState {
 	utils.Pause(2)
 
 	return &EditQuizState{user: state.user, quiz: quiz}
+}
+
+func (state *NewQuizState) promptQuizName() string {
+	prompt := promptui.Prompt{
+		Label: "How should the quiz be named?",
+		Validate: func(input string) error {
+			if len(input) < 1 {
+				return errors.New("name must be at least 1 character long")
+			}
+			if len(input) > 100 {
+				return errors.New("name must be at most 100 characters long")
+			}
+			return nil
+		},
+	}
+	result, _ := prompt.Run()
+	return result
 }
