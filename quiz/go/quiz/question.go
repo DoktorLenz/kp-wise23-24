@@ -18,7 +18,17 @@ type Question struct {
 type IQuestion interface {
 	Ask() (bool, error)
 	Edit() error
+	GetTitle() string
+	GetDescription() string
 	GetSolutionText() string
+}
+
+func (q Question) GetTitle() string {
+	return q.Title
+}
+
+func (q Question) GetDescription() string {
+	return q.Description
 }
 
 func (q *Question) Edit() error {
@@ -66,6 +76,6 @@ func (q *Question) Edit() error {
 	return nil
 }
 
-func (q *Question) PrintTitle() {
+func (q Question) PrintTitle() {
 	utils.Prompt("%s", q.Title)
 }
