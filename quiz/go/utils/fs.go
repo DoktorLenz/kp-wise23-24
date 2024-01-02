@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -23,8 +22,6 @@ func WriteFile(fileName string, data []byte) error {
 	if err := os.MkdirAll(dir, 0755); err != nil {
 		return err
 	}
-
-	fmt.Println(filePath)
 	return os.WriteFile(filePath, data, 0644)
 }
 
