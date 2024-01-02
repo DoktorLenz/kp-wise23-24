@@ -28,7 +28,7 @@ func NewManageQuizzesState(user user.IUser) *ManageQuizzesState {
 func (state *ManageQuizzesState) Run() IState {
 	app := tview.NewApplication()
 	table := tview.NewTable()
-	footer := tview.NewTextView().SetText("[+] Create Quiz\r\n[-] Delete Quiz\r\n[Enter] Edit Quiz\r\n[ESC] Logout]").SetTextAlign(tview.AlignCenter).SetTextColor(tcell.ColorWhite)
+	footer := tview.NewTextView().SetText("[+] Create Quiz\r\n[-] Delete Quiz\r\n[Enter] Edit Quiz\r\n[ESC] Back").SetTextAlign(tview.AlignCenter).SetTextColor(tcell.ColorWhite)
 
 	quizzes, err := quiz.GetAllQuizzesForUser(state.user.GetID())
 	if err != nil {
