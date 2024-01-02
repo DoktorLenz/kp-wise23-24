@@ -13,6 +13,14 @@ type ManageQuizzesState struct {
 	user user.IUser
 }
 
+type Action int
+
+const (
+	NewQuiz  Action = 0
+	EditQuiz Action = 1
+	Back     Action = 2
+)
+
 func NewManageQuizzesState(user user.IUser) *ManageQuizzesState {
 	return &ManageQuizzesState{user: user}
 }
@@ -27,16 +35,26 @@ func (state *ManageQuizzesState) Run() IState {
 		panic(err)
 	}
 
-	state.RunWindow(app, table, footer, quizzes)
+	selectedQuiz, action, err := state.RunWindow(app, table, footer, quizzes)
 
 	if err != nil {
 		panic(err)
 	}
 
+	switch action {
+	case NewQuiz:
+		return &NewQuizState{user: state.user}
+	case EditQuiz:
+		return &EditQuizState{user: state.user, quiz: selectedQuiz}
+	case Back:
+	default:
+		return &LoggedInState{user: state.user}
+	}
+
 	return &LoggedInState{user: state.user}
 }
 
-func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, quizzes []*quiz.Quiz) (*quiz.Quiz, error) {
+func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, quizzes []*quiz.Quiz) (*quiz.Quiz, Action, error) {
 	grid := tview.NewGrid().SetRows(0, 4).SetColumns(0).SetBorders(true)
 	grid.AddItem(table, 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(footer, 1, 0, 1, 1, 0, 0, false)
@@ -46,8 +64,9 @@ func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.
 	return state.RunTable(app, table, quizzes)
 }
 
-func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.Table, quizzes []*quiz.Quiz) (*quiz.Quiz, error) {
+func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.Table, quizzes []*quiz.Quiz) (*quiz.Quiz, Action, error) {
 	var selectedQuiz *quiz.Quiz
+	var actionAfterTable Action
 
 	// Table
 	table.SetBorders(true).SetSelectable(true, false).SetFixed(1, 2).Select(1, 0)
@@ -78,6 +97,7 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 	table.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Rune() == '+' {
 			app.Stop()
+			actionAfterTable = NewQuiz
 			// Create new Quiz
 		}
 		if event.Rune() == '-' {
@@ -88,8 +108,15 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 		if event.Key() == tcell.KeyEscape {
 			app.Stop()
 			selectedQuiz = nil
+			actionAfterTable = Back
 		}
 		return event
+	})
+
+	table.SetSelectedFunc(func(row int, column int) {
+		selectedQuiz = quizzes[row-1]
+		actionAfterTable = EditQuiz
+		app.Stop()
 	})
 
 	table.SetSelectedStyle(tcell.Style{}.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite))
@@ -117,10 +144,10 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 	err := app.Run()
 
 	if err != nil {
-		return nil, err
+		return nil, Back, err
 	}
 
-	return selectedQuiz, nil
+	return selectedQuiz, actionAfterTable, nil
 }
 
 func (state *ManageQuizzesState) DeleteQuiz(quizzes []*quiz.Quiz, event *tcell.EventKey, table *tview.Table) (*tcell.EventKey, []*quiz.Quiz) {
