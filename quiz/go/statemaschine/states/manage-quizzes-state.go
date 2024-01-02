@@ -13,12 +13,12 @@ type ManageQuizzesState struct {
 	user user.IUser
 }
 
-type Action int
+type ManageQuizzesAction int
 
 const (
-	NewQuiz  Action = 0
-	EditQuiz Action = 1
-	Back     Action = 2
+	NewQuiz  ManageQuizzesAction = 0
+	EditQuiz ManageQuizzesAction = 1
+	Back     ManageQuizzesAction = 2
 )
 
 func NewManageQuizzesState(user user.IUser) *ManageQuizzesState {
@@ -54,7 +54,7 @@ func (state *ManageQuizzesState) Run() IState {
 	return &LoggedInState{user: state.user}
 }
 
-func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, quizzes []*quiz.Quiz) (*quiz.Quiz, Action, error) {
+func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, quizzes []*quiz.Quiz) (*quiz.Quiz, ManageQuizzesAction, error) {
 	grid := tview.NewGrid().SetRows(0, 4).SetColumns(0).SetBorders(true)
 	grid.AddItem(table, 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(footer, 1, 0, 1, 1, 0, 0, false)
@@ -64,9 +64,9 @@ func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.
 	return state.RunTable(app, table, quizzes)
 }
 
-func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.Table, quizzes []*quiz.Quiz) (*quiz.Quiz, Action, error) {
+func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.Table, quizzes []*quiz.Quiz) (*quiz.Quiz, ManageQuizzesAction, error) {
 	var selectedQuiz *quiz.Quiz
-	var actionAfterTable Action
+	var actionAfterTable ManageQuizzesAction
 
 	// Table
 	table.SetBorders(true).SetSelectable(true, false).SetFixed(1, 2).Select(1, 0)
