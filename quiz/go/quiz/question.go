@@ -12,11 +12,11 @@ type Question struct {
 	Title       string      `json:"title"`
 	Description string      `json:"description"`
 	Solution    interface{} `json:"solution"`
+	IQuestion
 }
 
 type IQuestion interface {
-	CheckAnswer() bool
-	Ask() (interface{}, error)
+	Ask() (bool, error)
 	Edit() error
 	GetSolutionText() string
 }
@@ -29,10 +29,10 @@ func (q *Question) Edit() error {
 		Default: q.Title,
 		Validate: func(input string) error {
 			if len(input) == 0 {
-				return errors.New("The title must not be empty")
+				return errors.New("the title must not be empty")
 			}
 			if len(input) > 100 {
-				return errors.New("The title must not be longer than 100 characters")
+				return errors.New("the title must not be longer than 100 characters")
 			}
 
 			return nil
@@ -44,7 +44,7 @@ func (q *Question) Edit() error {
 		Default: q.Description,
 		Validate: func(input string) error {
 			if len(input) > 100 {
-				return errors.New("The description must not be longer than 100 characters")
+				return errors.New("the description must not be longer than 100 characters")
 			}
 
 			return nil

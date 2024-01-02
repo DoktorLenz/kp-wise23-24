@@ -24,11 +24,7 @@ func (tq ToggleQuestion) MarshalJSON() ([]byte, error) {
 	})
 }
 
-func (tq *ToggleQuestion) CheckAnswer(answer bool) bool {
-	return tq.Question.Solution.(bool) == answer
-}
-
-func (tq *ToggleQuestion) Ask() (interface{}, error) {
+func (tq ToggleQuestion) Ask() (bool, error) {
 	prompt := promptui.Select{
 		Label: tq.Question.Title,
 		Items: []string{tq.TrueText, tq.FalseText},
@@ -36,13 +32,13 @@ func (tq *ToggleQuestion) Ask() (interface{}, error) {
 
 	_, answer, err := prompt.Run()
 	if err != nil {
-		return nil, err
+		return false, err
 	}
 
 	return answer == tq.TrueText, nil
 }
 
-func (tq *ToggleQuestion) GetSolutionText() string {
+func (tq ToggleQuestion) GetSolutionText() string {
 	if tq.Question.Solution.(bool) {
 		return tq.TrueText
 	} else {
@@ -50,7 +46,7 @@ func (tq *ToggleQuestion) GetSolutionText() string {
 	}
 }
 
-func (tq *ToggleQuestion) Edit() error {
+func (tq ToggleQuestion) Edit() error {
 	tq.Question.Edit()
 
 	trueTextPrompt := promptui.Prompt{
