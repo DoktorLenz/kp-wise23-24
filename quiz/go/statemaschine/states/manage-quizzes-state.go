@@ -72,6 +72,7 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 	table.SetBorders(true).SetSelectable(true, false).SetFixed(1, 2).Select(1, 0)
 	table.SetSelectedFunc(func(row int, column int) {
 		selectedQuiz = quizzes[row-1]
+		actionAfterTable = ManageQuizzesEditQuiz
 		app.Stop()
 	})
 
@@ -111,12 +112,6 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 			actionAfterTable = ManageQuizzesBack
 		}
 		return event
-	})
-
-	table.SetSelectedFunc(func(row int, column int) {
-		selectedQuiz = quizzes[row-1]
-		actionAfterTable = ManageQuizzesEditQuiz
-		app.Stop()
 	})
 
 	table.SetSelectedStyle(tcell.Style{}.Background(tcell.ColorBlack).Foreground(tcell.ColorWhite))
