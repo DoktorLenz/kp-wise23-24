@@ -16,9 +16,9 @@ type ManageQuizzesState struct {
 type ManageQuizzesAction int
 
 const (
-	NewQuiz  ManageQuizzesAction = 0
-	EditQuiz ManageQuizzesAction = 1
-	Back     ManageQuizzesAction = 2
+	ManageQuizzesNewQuiz  ManageQuizzesAction = 0
+	ManageQuizzesEditQuiz ManageQuizzesAction = 1
+	ManageQuizzesBack     ManageQuizzesAction = 2
 )
 
 func NewManageQuizzesState(user user.IUser) *ManageQuizzesState {
@@ -42,11 +42,11 @@ func (state *ManageQuizzesState) Run() IState {
 	}
 
 	switch action {
-	case NewQuiz:
+	case ManageQuizzesNewQuiz:
 		return &NewQuizState{user: state.user}
-	case EditQuiz:
+	case ManageQuizzesEditQuiz:
 		return &EditQuizState{user: state.user, quiz: selectedQuiz}
-	case Back:
+	case ManageQuizzesBack:
 	default:
 		return &LoggedInState{user: state.user}
 	}
@@ -97,7 +97,7 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 	table.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		if event.Rune() == '+' {
 			app.Stop()
-			actionAfterTable = NewQuiz
+			actionAfterTable = ManageQuizzesNewQuiz
 			// Create new Quiz
 		}
 		if event.Rune() == '-' {
@@ -108,14 +108,14 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 		if event.Key() == tcell.KeyEscape {
 			app.Stop()
 			selectedQuiz = nil
-			actionAfterTable = Back
+			actionAfterTable = ManageQuizzesBack
 		}
 		return event
 	})
 
 	table.SetSelectedFunc(func(row int, column int) {
 		selectedQuiz = quizzes[row-1]
-		actionAfterTable = EditQuiz
+		actionAfterTable = ManageQuizzesEditQuiz
 		app.Stop()
 	})
 
@@ -144,7 +144,7 @@ func (state *ManageQuizzesState) RunTable(app *tview.Application, table *tview.T
 	err := app.Run()
 
 	if err != nil {
-		return nil, Back, err
+		return nil, ManageQuizzesBack, err
 	}
 
 	return selectedQuiz, actionAfterTable, nil
