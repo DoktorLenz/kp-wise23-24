@@ -12,5 +12,5 @@ type EditQuizState struct {
 
 func (state *EditQuizState) Run() IState {
 	// TODO
-	return nil
+	return &ManageQuizzesState{user: state.user}
 }
