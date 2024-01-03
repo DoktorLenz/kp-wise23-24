@@ -2,6 +2,7 @@ package user
 
 import (
 	"encoding/json"
+	"errors"
 
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/utils"
 	"github.com/google/uuid"
@@ -135,4 +136,19 @@ func IsAnyUserRegistered() (bool, error) {
 	}
 
 	return len(users) > 0, nil
+}
+
+func GetUsernameByID(id string) (string, error) {
+	users, err := GetAllUsers()
+	if err != nil {
+		return "", err
+	}
+
+	for _, user := range users {
+		if user.ID == id {
+			return user.Username, nil
+		}
+	}
+
+	return "", errors.New("User not found")
 }

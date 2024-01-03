@@ -180,3 +180,32 @@ func SaveAllQuizzes(quizzes []*Quiz) error {
 	}
 	return utils.WriteFile("quizzes.json", data)
 }
+
+func AvailableShareCodes() ([]string, error) {
+	quizzes, err := GetAllQuizzes()
+	if err != nil {
+		return nil, err
+	}
+
+	var shareCodes []string
+	for _, quiz := range quizzes {
+		shareCodes = append(shareCodes, quiz.ShareCode)
+	}
+
+	return shareCodes, nil
+}
+
+func GetQuizByShareCode(shareCode string) (*Quiz, error) {
+	quizzes, err := GetAllQuizzes()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, quiz := range quizzes {
+		if quiz.ShareCode == shareCode {
+			return quiz, nil
+		}
+	}
+
+	return nil, errors.New("Quiz not found")
+}
