@@ -42,7 +42,7 @@ func (i *InitState) Run() IState {
 	case string(InitRegister):
 		return &RegisterState{}
 	case string(InitJoin):
-		return &InitState{}
+		return &JoinQuizState{}
 	case string(InitExit):
 		return &ExitState{}
 	default:
