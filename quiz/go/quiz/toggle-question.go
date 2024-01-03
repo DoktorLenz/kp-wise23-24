@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/google/uuid"
 	"github.com/manifoldco/promptui"
 )
 
@@ -11,6 +12,19 @@ type ToggleQuestion struct {
 	Question
 	TrueText  string `json:"trueText"`
 	FalseText string `json:"falseText"`
+}
+
+func NewToggleQuestion() *ToggleQuestion {
+	return &ToggleQuestion{
+		Question: Question{
+			ID:          uuid.New().String(),
+			Title:       "",
+			Description: "",
+			Solution:    nil,
+		},
+		TrueText:  "",
+		FalseText: "",
+	}
 }
 
 func (tq ToggleQuestion) MarshalJSON() ([]byte, error) {
@@ -46,7 +60,7 @@ func (tq ToggleQuestion) GetSolutionText() string {
 	}
 }
 
-func (tq ToggleQuestion) Edit() error {
+func (tq *ToggleQuestion) Edit() error {
 	tq.Question.Edit()
 
 	trueTextPrompt := promptui.Prompt{
@@ -54,10 +68,10 @@ func (tq ToggleQuestion) Edit() error {
 		Default: tq.TrueText,
 		Validate: func(input string) error {
 			if len(input) == 0 {
-				return errors.New("The text must not be empty")
+				return errors.New("the text must not be empty")
 			}
 			if len(input) > 100 {
-				return errors.New("The text must not be longer than 100 characters")
+				return errors.New("the text must not be longer than 100 characters")
 			}
 
 			return nil
@@ -69,10 +83,10 @@ func (tq ToggleQuestion) Edit() error {
 		Default: tq.FalseText,
 		Validate: func(input string) error {
 			if len(input) == 0 {
-				return errors.New("The text must not be empty")
+				return errors.New("the text must not be empty")
 			}
 			if len(input) > 100 {
-				return errors.New("The text must not be longer than 100 characters")
+				return errors.New("the text must not be longer than 100 characters")
 			}
 
 			return nil
