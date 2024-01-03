@@ -18,9 +18,14 @@ type Question struct {
 type IQuestion interface {
 	Ask() (bool, error)
 	Edit() error
+	GetID() string
 	GetTitle() string
 	GetDescription() string
 	GetSolutionText() string
+}
+
+func (q Question) GetID() string {
+	return q.ID
 }
 
 func (q Question) GetTitle() string {

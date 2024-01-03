@@ -39,7 +39,6 @@ func (state *EditQuizState) Run() IState {
 	case EditQuizEditQuestion:
 		return &EditQuestionState{user: state.user, quiz: state.quiz, question: selectedQuestion}
 	case EditQuizBack:
-	default:
 		utils.Clear()
 		utils.Prompt("Saving quiz...")
 		utils.Pause(2)
@@ -48,6 +47,8 @@ func (state *EditQuizState) Run() IState {
 		state.quiz.Save()
 		utils.Pause(2)
 		return &ManageQuizzesState{user: state.user}
+	default:
+		panic("Unknown action")
 	}
 
 	return &ManageQuizzesState{user: state.user}
@@ -99,8 +100,7 @@ func (state *EditQuizState) RunTable(app *tview.Application, table *tview.Table,
 			actionAfterTable = EditQuizAddQuestion
 		}
 		if event.Rune() == '-' {
-			// Delete Question
-
+			return state.DeleteQuestion(state.quiz, event, table)
 		}
 		if event.Key() == tcell.KeyEscape {
 			app.Stop()
@@ -134,4 +134,19 @@ func (state *EditQuizState) RunTable(app *tview.Application, table *tview.Table,
 	}
 
 	return selectedQuestion, actionAfterTable, nil
+}
+
+func (state *EditQuizState) DeleteQuestion(quiz *quiz.Quiz, event *tcell.EventKey, table *tview.Table) *tcell.EventKey {
+	selectedRow, _ := table.GetSelection()
+	selectedQuestion := quiz.Questions[selectedRow-1]
+
+	quiz.RemoveQuestion(selectedQuestion.GetID())
+
+	table.RemoveRow(selectedRow)
+	if (selectedRow - 1) < len(quiz.Questions) {
+		table.Select(selectedRow, 0)
+	} else {
+		table.Select(selectedRow-1, 0)
+	}
+	return event
 }

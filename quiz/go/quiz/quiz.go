@@ -77,6 +77,15 @@ func (quiz *Quiz) Save() error {
 	return err
 }
 
+func (quiz *Quiz) RemoveQuestion(id string) {
+	for i, question := range quiz.Questions {
+		if question.GetID() == id {
+			quiz.Questions = append(quiz.Questions[:i], quiz.Questions[i+1:]...)
+			return
+		}
+	}
+}
+
 func Create(userId string, name string) (*Quiz, error) {
 	quizzes, err := GetAllQuizzes()
 	if err != nil {
