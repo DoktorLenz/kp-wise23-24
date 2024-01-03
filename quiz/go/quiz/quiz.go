@@ -42,7 +42,6 @@ func (quiz *Quiz) Delete() ([]*Quiz, error) {
 	}
 
 	if index == -1 {
-		utils.Prompt("Quiz not found: %+v", quiz)
 		return nil, errors.New("Quiz not found: " + quiz.ID)
 	}
 
@@ -51,6 +50,31 @@ func (quiz *Quiz) Delete() ([]*Quiz, error) {
 
 	return quizzes, err
 
+}
+
+func (quiz *Quiz) Save() error {
+	quizzes, err := GetAllQuizzes()
+	if err != nil {
+		return err
+	}
+
+	index := -1
+	for i, q := range quizzes {
+		if q.ID == quiz.ID {
+			index = i
+			break
+		}
+	}
+
+	if index == -1 {
+		return errors.New("Quiz not found: " + quiz.ID)
+	}
+
+	quizzes[index] = quiz
+
+	err = SaveAllQuizzes(quizzes)
+
+	return err
 }
 
 func Create(userId string, name string) (*Quiz, error) {

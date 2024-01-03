@@ -3,6 +3,7 @@ package states
 import (
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/quiz"
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/user"
+	"github.com/DoktorLenz/kp-wise23-24/quiz/go/utils"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
@@ -24,7 +25,7 @@ type EditQuizState struct {
 func (state *EditQuizState) Run() IState {
 	app := tview.NewApplication()
 	table := tview.NewTable()
-	footer := tview.NewTextView().SetText("[+] Add Question\r\n[-] Delete Question\r\n[Enter] Edit Question\r\n[ESC] Back and Save]").SetTextAlign(tview.AlignCenter).SetTextColor(tcell.ColorWhite)
+	footer := tview.NewTextView().SetText("[+] Add Question\r\n[-] Delete Question\r\n[Enter] Edit Question\r\n[ESC] Back and Save").SetTextAlign(tview.AlignCenter).SetTextColor(tcell.ColorWhite)
 
 	selectedQuestion, action, err := state.RunWindow(app, table, footer, state.quiz.Questions)
 
@@ -39,6 +40,13 @@ func (state *EditQuizState) Run() IState {
 		return &EditQuestionState{user: state.user, quiz: state.quiz, question: selectedQuestion}
 	case EditQuizBack:
 	default:
+		utils.Clear()
+		utils.Prompt("Saving quiz...")
+		utils.Pause(2)
+		utils.Clear()
+		utils.Prompt("Quiz saved!")
+		state.quiz.Save()
+		utils.Pause(2)
 		return &ManageQuizzesState{user: state.user}
 	}
 
