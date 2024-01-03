@@ -47,11 +47,10 @@ func (state *ManageQuizzesState) Run() IState {
 	case ManageQuizzesEditQuiz:
 		return &EditQuizState{user: state.user, quiz: selectedQuiz}
 	case ManageQuizzesBack:
-	default:
 		return &LoggedInState{user: state.user}
+	default:
+		panic("Unknown action")
 	}
-
-	return &LoggedInState{user: state.user}
 }
 
 func (state *ManageQuizzesState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, quizzes []*quiz.Quiz) (*quiz.Quiz, ManageQuizzesAction, error) {

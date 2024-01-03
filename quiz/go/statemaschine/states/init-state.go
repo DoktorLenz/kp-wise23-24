@@ -5,7 +5,18 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-type InitState struct{}
+type InitState struct {
+	IState
+}
+
+type InitAction string
+
+const (
+	InitLogin    InitAction = "Login"
+	InitRegister InitAction = "Register"
+	InitJoin     InitAction = "Join Quiz"
+	InitExit     InitAction = "Exit"
+)
 
 func (i *InitState) Run() IState {
 	var options []string
@@ -14,9 +25,9 @@ func (i *InitState) Run() IState {
 		panic(err)
 	}
 	if loginAvailable {
-		options = append(options, "Login")
+		options = append(options, string(InitLogin))
 	}
-	options = append(options, "Register", "Join Quiz", "Exit")
+	options = append(options, string(InitRegister), string(InitJoin), string(InitExit))
 
 	prompt := promptui.Select{
 		Label: "Welcome to THE QUIZ APP",
@@ -26,15 +37,15 @@ func (i *InitState) Run() IState {
 	_, result, _ := prompt.Run()
 
 	switch result {
-	case "Login":
+	case string(InitLogin):
 		return &LoginState{}
-	case "Register":
+	case string(InitRegister):
 		return &RegisterState{}
-	case "Join":
+	case string(InitJoin):
 		return &InitState{}
-	case "Exit":
+	case string(InitExit):
 		return &ExitState{}
 	default:
-		return &InitState{}
+		panic("Unknown action")
 	}
 }
