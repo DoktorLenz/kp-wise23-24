@@ -94,6 +94,10 @@ func (quiz *Quiz) RemoveQuestion(id string) {
 	}
 }
 
+func (quiz *Quiz) AddResponse(answers map[string]bool) {
+	quiz.Responses[uuid.New().String()] = answers
+}
+
 func Create(userId string, name string) (*Quiz, error) {
 	quizzes, err := GetAllQuizzes()
 	if err != nil {

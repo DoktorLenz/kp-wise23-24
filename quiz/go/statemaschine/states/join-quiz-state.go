@@ -50,8 +50,7 @@ func (state *JoinQuizState) Run() IState {
 		utils.Prompt(quiz.Description)
 	}
 	utils.Prompt("")
-	utils.Prompt("Press enter to start the quiz...")
-	utils.AwaitInput()
+	utils.AwaitEnter()
 
 	return &RunQuizState{quiz: quiz}
 }
