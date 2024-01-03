@@ -1,8 +1,11 @@
 package quiz
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
+	"strconv"
 
 	"github.com/DoktorLenz/kp-wise23-24/quiz/go/utils"
 	"github.com/google/uuid"
@@ -104,6 +107,8 @@ func Create(userId string, name string) (*Quiz, error) {
 		Questions: make([]IQuestion, 0),
 		Responses: make(map[string]map[string]bool),
 	}
+
+	quiz.ShareCode = GenerateShareCode(quiz.ID)
 
 	quizzes = append(quizzes, quiz)
 
@@ -208,4 +213,14 @@ func GetQuizByShareCode(shareCode string) (*Quiz, error) {
 	}
 
 	return nil, errors.New("Quiz not found")
+}
+
+func GenerateShareCode(id string) string {
+	hasher := sha256.New()
+	hasher.Write([]byte(id))
+	hash := hasher.Sum(nil)
+	hashHex := hex.EncodeToString(hash)
+	hashHexTruncated := hashHex[:8]
+	shareCode, _ := strconv.ParseInt(hashHexTruncated, 16, 64)
+	return strconv.FormatInt(shareCode, 36)
 }
