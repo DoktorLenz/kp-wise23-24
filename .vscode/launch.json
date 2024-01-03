@@ -2,6 +2,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "(GO) Debug Quiz App",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/quiz/go",
+            "console": "integratedTerminal"
+        },
+        {
             "request": "launch",
             "name": "Launch Quiz App",
             "type": "node",
@@ -18,16 +26,6 @@
             ],
             "attachSimplePort": 9229,
             "console": "integratedTerminal"
-        },
-        {
-            "name": "GO Launch Quiz App",
-            "type": "go",
-            "request": "launch",
-            "mode": "debug",
-            "program": "${workspaceFolder}/quiz/go",
-            "env": {},
-            "args": [],
-            "showLog": true
         }
     ],
 }
