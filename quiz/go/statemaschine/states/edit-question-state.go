@@ -13,5 +13,6 @@ type EditQuestionState struct {
 }
 
 func (state *EditQuestionState) Run() IState {
-	return nil
+	state.question.Edit()
+	return &EditQuizState{user: state.user, quiz: state.quiz}
 }

@@ -35,7 +35,7 @@ func (state *EditQuizState) Run() IState {
 
 	switch action {
 	case EditQuizAddQuestion:
-		// return &AddQuestionState{user: state.user, quiz: state.quiz}
+		return &AddQuestionState{user: state.user, quiz: state.quiz}
 	case EditQuizEditQuestion:
 		return &EditQuestionState{user: state.user, quiz: state.quiz, question: selectedQuestion}
 	case EditQuizBack:
@@ -50,8 +50,6 @@ func (state *EditQuizState) Run() IState {
 	default:
 		panic("Unknown action")
 	}
-
-	return &ManageQuizzesState{user: state.user}
 }
 
 func (state *EditQuizState) RunWindow(app *tview.Application, table *tview.Table, footer *tview.TextView, questions []quiz.IQuestion) (quiz.IQuestion, EditQuizAction, error) {

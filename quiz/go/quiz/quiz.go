@@ -77,6 +77,11 @@ func (quiz *Quiz) Save() error {
 	return err
 }
 
+func (quiz *Quiz) AddQuestion(question IQuestion) IQuestion {
+	quiz.Questions = append(quiz.Questions, question)
+	return question
+}
+
 func (quiz *Quiz) RemoveQuestion(id string) {
 	for i, question := range quiz.Questions {
 		if question.GetID() == id {
