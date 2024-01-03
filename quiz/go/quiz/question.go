@@ -12,7 +12,6 @@ type Question struct {
 	Title       string      `json:"title"`
 	Description string      `json:"description"`
 	Solution    interface{} `json:"solution"`
-	IQuestion
 }
 
 type IQuestion interface {
